@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generated-by" content="Markdown PRO, http://markdownpro.com"/>
+<title></title>
+</head>
+<body>
+<p align="center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/logo.png" width="300px" /></p>
+
+<p><a href="http://www.opendiscovery.org.uk">www.opendiscovery.org.uk</a></p>
+
+<p>Version: 1.0a</p>
+
+<p>Contacts: <a href="mailto:gareth.price@warwick.ac.uk">gareth.price@warwick.ac.uk</a>; <a href="mailto:a.marsh@warwick.ac.uk">a.marsh@warwick.ac.uk</a></p>
+
+<h2>Example 1: Statin + HMG-CoA Reductase</h2>
+
+<p>You can follow along with this example by downloading the initial PDB from <a href="http://www.rcsb.org/pdb/explore/explore.do?structureId=1T02">here</a>. Before starting, watch the video tutorial provided by the authors of AutoDock Vina, <a href="http://vina.scripps.edu/tutorial.html">here</a>.</p>
+
+<h3>Preparing the files</h3>
+
+<p>We first need to split the crystal structure of the complex into separate receptor and ligand files.
+ Open up the file 1T02.pdb in your favourite text editor and look at the file. The first section are REMARKS about the structure:</p>
+
+<p style="text-align: center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/opendiscovery/1-header_of_pdb.png"></p>
+
+<p>Delete all the header lines, up to line 765 which is the first atom of the structure.</p>
+
+<p>Copy all lines with ATOM at the start into its own file, named <code>hmg_coa.pdb</code>. Include the TER statement in line 5529. Then, copy the subsequent lines starting with HETATM and LVA in the the fourth column into its own file, <code>LVA.pdb</code>:</p>
+
+<p style="text-align: center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/opendiscovery/2-LVA.png"></p>
+
+<p>Now, put <code>hmg_coa.pdb</code> into a &#39;receptor&#39; folder and <code>LVA.pdb</code> into a &#39;pdb&#39; folder. Next, we need to prepare the receptor protein (<code>hmg_coa.pdb</code>).</p>
+
+<p>Open up AutoDockTools, and follow the steps in the image below. Make sure to remember the coordinates and dimensions. Make sure Spacing (Angstrom) is set to 1.000.</p>
+
+<p style="text-align: center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/opendiscovery/3-prepare_receptor.jpg"></p>
+
+<p>Open a new file and enter the box coordinates and dimensions such as:</p>
+
+<pre><code>center_x = 83.033
+center_y = 125.978
+center_z = 106.748
+
+size_x = 16
+size_y = 14
+size_z = 14
+</code></pre>
+
+<p>Save it as <code>hmg_coa.conf</code>.</p>
+
+<p>You should have a folder that looks like:</p>
+
+<p style="text-align: center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/opendiscovery/4-dir.png"></p>
+
+<h3>Running ODScreen</h3>
+
+<p>We can now run the screening. First, let&#39;s check that everything is installed properly. In terminal, <code>cd</code> to the Protocol Folder (i.e. the folder with <code>odscreen.py</code>, <code>odparam.py</code> etc.) and run <code>python odcheck.py</code>. Check that there are no failures, and follow the installation guides if there are. You can ignore the warnings. Now, we can run the screening protocol. Navigate to the folder where hmg_coa.conf is located (from before). Now we can run <code>odscreen.py</code>. Make sure you use the correct path to the <code>odscreen.py</code> file.</p>
+
+<p><code>python /protocolfolder/odscreen.py -d . -r hmg_coa -i pdb -c hmg_coa.conf</code></p>
+
+<p>This is the result:</p>
+
+<pre><code># ----------------------------------------- #
+#              OPEN DISCOVERY               #
+#             Screening Module              #
+# ----------------------------------------- #
+# Version:  1.0                             #
+# URL:      www.opendiscovery.org.uk        #
+# Contacts: gareth.price@warwick.ac.uk      #
+#           a.marsh@warwick.ac.uk           #
+# ----------------------------------------- #
+# LigDir: /Desktop/example-statin           #
+#           Receptor Name: hmg_coa          #
+#              Input Type: pdb              #
+#             Conf: hmg_coa.conf            #
+#             Exhaustivness: 20             #
+# ----------------------------------------- #
+#  Time Started: Mon, 22 Jul 2013 00:15:20  #
+# ----------------------------------------- #
+
+
+                PDB -&gt; SMILES
+            Writing smiles/LVA.txt
+
+
+                    IMAGES
+            Writing images/LVA.svg
+
+
+                     MOL
+             Writing mol/LVA.mol
+
+
+                     MOL2
+            Writing mol2/LVA.mol2
+
+
+                 MINIMISATION
+                Minimising LVA
+
+
+               PDBQT PREPARATION
+              Writing LVA.pdbqt
+
+
+                   SCREENING
+                Processing LVA
+
+
+                  EXTRACTING
+           Processing results/LVA/
+
+
+                  PDB -&gt; MOL2
+        Writing results-mol2/LVA.mol2
+
+
+                  SUMMARISING
+               Summarising LVA
+
+
+               MAKING COMPLEXES
+                 Writing LVA
+
+
+# ----------------------------------------- #
+#                  FINSHED                  #
+#         Time Taken: 231.40 seconds        #
+# ----------------------------------------- #
+</code></pre>
+
+<p>The resulting files are:</p>
+
+<p style="text-align: center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/opendiscovery/5-result_dir.png"></p>
+
+<p>From this point on you can analyse the results. A starting point is to look at the binding energies, sorted and summarised in the <code>summary-sorted.csv</code> file. This should open in any text editor or programs like Excel.</p>
+
+</body>
+</html>

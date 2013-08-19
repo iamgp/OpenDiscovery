@@ -1,0 +1,103 @@
+# ----------------------------------------- #
+#              OPEN DISCOVERY               #
+#             Screening Module              #
+# ----------------------------------------- #
+# Version:  1.0                             #
+# URL:      www.opendiscovery.org.uk        #
+# Contacts: gareth.price@warwick.ac.uk      #
+#           a.marsh@warwick.ac.uk           #
+# ----------------------------------------- #
+# LigDir: /Users/garethprice/Desktop/example-statin #
+#           Receptor Name: hmg_coa          #
+#              Input Type: pdb              #
+#             Conf: hmg_coa.conf            #
+#             Exhaustivness: 20             #
+# ----------------------------------------- #
+#  Time Started: Mon, 22 Jul 2013 00:15:20  #
+# ----------------------------------------- #
+
+
+                PDB -> SMILES                
+            Writing smiles/LVA.txt           
+
+
+                    IMAGES                   
+            Writing images/LVA.svg           
+
+
+                     MOL                     
+             Writing mol/LVA.mol             
+
+
+                     MOL2                    
+            Writing mol2/LVA.mol2            
+
+
+                 MINIMISATION                
+                Minimising LVA               
+
+
+               PDBQT PREPARATION             
+              Writing LVA.pdbqt              
+
+
+                   SCREENING                 
+                Processing LVA               
+
+
+                  EXTRACTING                 
+           Processing results/LVA/           
+
+
+                  PDB -> MOL2                
+        Writing results-mol2/LVA.mol2        
+
+
+                  SUMMARISING                
+               Summarising LVA               
+
+
+               MAKING COMPLEXES              
+                 Writing LVA                 
+
+
+# ----------------------------------------- #
+#                  FINSHED                  #
+#         Time Taken: 231.40 seconds        #
+# ----------------------------------------- #
+# ----------------------------------------- #
+#              OPEN DISCOVERY               #
+#          Parameterisation Module          #
+# ----------------------------------------- #
+# Version:  1.0                             #
+# URL:      www.opendiscovery.org.uk        #
+# Contacts: gareth.price@warwick.ac.uk      #
+#           a.marsh@warwick.ac.uk           #
+# ----------------------------------------- #
+# LigDir: /Users/garethprice/Desktop/example-statin #
+#           Receptor Name: hmg_coa          #
+#              Screened?: False             #
+# ----------------------------------------- #
+#  Time Started: Mon, 22 Jul 2013 10:09:58  #
+# ----------------------------------------- #
+
+
+# ----------------------------------------- #
+#                  FINSHED                  #
+#          Time Taken: 0.01 seconds         #
+# ----------------------------------------- #
+# ----------------------------------------- #
+#              OPEN DISCOVERY               #
+#          Parameterisation Module          #
+# ----------------------------------------- #
+# Version:  1.0                             #
+# URL:      www.opendiscovery.org.uk        #
+# Contacts: gareth.price@warwick.ac.uk      #
+#           a.marsh@warwick.ac.uk           #
+# ----------------------------------------- #
+# LigDir: /Users/garethprice/Desktop/example-statin #
+#           Receptor Name: hmg_coa          #
+#              Screened?: True              #
+# ----------------------------------------- #
+#  Time Started: Mon, 22 Jul 2013 10:10:13  #
+# ----------------------------------------- #

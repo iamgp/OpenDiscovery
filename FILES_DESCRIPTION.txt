@@ -1,0 +1,47 @@
+
+
+# ----------------------------------------- #
+#              OPEN DISCOVERY               #
+#                  README                   #
+# ----------------------------------------- #
+# Version:  1.0                             #
+# URL:      www.opendiscovery.org.uk        #
+# Contacts: gareth.price@warwick.ac.uk      #
+#           a.marsh@warwick.ac.uk           #
+# ----------------------------------------- #
+
+
+Files included are:
+
+LICENSE
+    LICENSE.txt         - GPLv3
+
+OD FILES
+    odcheck.py          - A quick script to determine if all dependencies are installed and accessible
+    odscreen.py         - The main python file which runs the screening process, as documented in the paper.
+
+LIB FOLDER
+n.b. please leave these alone!
+    odcore.py           - Core OD functions
+    extract.awk         - Mode extraction script
+    vina                - OSX vina binary
+
+EXAMPLES/FILES FOLDER
+    RECEPTOR
+        hmg_coa.pdb         - Receptor protein PDB file
+        hmg_coa.pdbqt       - Receptor protein PDBQT file
+
+    LIGAND
+        LVA.mol             - LVA ligand MOL file
+
+    CONFIGURATION
+        hmg_coa.conf        - Vina config file for HMG-COA
+
+    SAMPLE-RESULTS
+        Results from the docking, run by the command:
+
+        python odscreen.py -d sample-results -i pdb -r hmg_coa -c hmg_coa.conf -e 20
+
+
+WALKTHROUGH
+    - this can be found in the examples folder.

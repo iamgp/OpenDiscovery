@@ -276,15 +276,16 @@ with open('results/summary-sorted.csv', 'w') as file:
         file.write(line[0] + ', ' + line[1] + '\n')
 
 # makes complexes
-if can_write('results/complexes'):
+#if can_write('results/complexes'):
     log('\n'), log(' MAKING COMPLEXES'.center(45))
     make_folder('results/complexes')
     for cmpnd in glob.glob('results/*/'):
         if 'complex' not in cmpnd:
             b = os.path.basename(os.path.normpath(cmpnd))
             c = cmpnd + b + '_mode_1.pdb'
-            subprocess.call('pymol -c receptor/{0}.pdb {1}  -d \'save results/complexes/{2}.pdb \''.format(
-                receptorName, c, b), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            #print subprocess.call('pymol -c receptor/{0}.pdb {1}  -d \'save results/complexes/{2}.pdb \''.format(
+            #    receptorName, c, b), shell=True)
+            print subprocess.call('grep -h ATOM {0} {1} >| {2}'.format('receptor/'+receptorName+'.pdb', c, 'results/complexes/'+receptorName+'.pdb'), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True )
             log('Writing {0}'.format(b).center(45))
 
 log('\n'), log('# ----------------------------------------- #')

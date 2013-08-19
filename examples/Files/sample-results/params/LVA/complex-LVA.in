@@ -1,0 +1,10 @@
+source leaprc.ff99SB
+			source leaprc.gaff
+			loadamberparams LVA.frcmod
+			loadoff LVA.lib
+			complex = loadpdb complex-LVA.pdb
+			saveamberparm complex complex-LVA.prmtop complex-LVA.inpcrd
+			solvateoct complex TIP3PBOX 15
+			saveamberparm complex complex-LVA-wat.prmtop complex-LVA-wat.inpcrd
+			savepdb complex complex-LVA-wat.pdb
+			

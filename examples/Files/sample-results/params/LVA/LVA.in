@@ -1,0 +1,8 @@
+source leaprc.ff99SB
+			source leaprc.gaff
+			LIG = loadmol2 LVA/LVA.mol2
+			loadamberparams LVA/LVA.frcmod
+			saveoff LIG LVA/LVA.lib
+			saveamberparm LIG LVA/LVA.prmtop LVA/LVA.inpcrd
+			savepdb LIG LVA/LVA.pdb
+			quit

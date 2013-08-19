@@ -3,6 +3,7 @@ import errno
 import subprocess
 import glob
 from distutils.dir_util import copy_tree
+import re
 
 # -----------------------------------------
 #              OPEN DISCOVERY
@@ -120,3 +121,7 @@ def file_present(path):
         return True
     else:
         return False
+
+def concatPDBs(pdb1, pdb2, newName):
+    subprocess.call('grep -h ATOM {0} {1} >| {2}'.format(pdb1, pdb2, newName))
+    #print 'grep -h ATOM {0} {1} >| {2}'.format(pdb1, pdb2, newName)

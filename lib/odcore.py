@@ -4,7 +4,7 @@ import subprocess
 import glob
 from distutils.dir_util import copy_tree
 import re
-
+from delegate import *
 # -----------------------------------------
 #              OPEN DISCOVERY
 #        CORE FUNCTIONs (LEAVE ALONE)
@@ -15,7 +15,7 @@ import re
 #           a.marsh@warwick.ac.uk
 # -----------------------------------------
 
-VERSION=1.0
+VERSION=1.0.1
 
 def make_folder(path):
     """Attempts folder creation
@@ -100,6 +100,27 @@ def use_obabel(inputType, outputType, obabel_extra=''):
         subprocess.call('obabel {0} -O {1}/{2}.{3} {4}'.format(
             cmpnd, outputType, b, outputType, obabel_extra), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
+def use_parallelized_obabel(inputType, outputType, obabel_extra=''):
+    make_folder(outputType)
+    x = [] # number of elements in array
+    y = []
+    for cmpnd in glob.glob('{0}/*.{1}'.format(inputType, inputType)):
+        b = os.path.splitext(os.path.basename(cmpnd))[0]
+        if len(x) > 20:
+            parallelize(_execute_obabel, x)
+            print ''
+            print 'Written: ',
+            for a in y:
+                print a,
+            #print x
+            x = []
+            y = []
+        x.append('obabel {0} -O {1}/{2}.{3} {4}'.format(cmpnd, outputType, b, outputType, obabel_extra))
+        y.append(b)
+
+
+def _execute_obabel(toRun):
+    return subprocess.call('{0}'.format(toRun), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
 def use_obminimize(inputFolder):
     """ Wrapper for OBMinimize (must be installed - comes with Open Babel)

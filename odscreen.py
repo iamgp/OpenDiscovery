@@ -75,7 +75,7 @@ receptorName = args['receptor']
 exhaustiveness = args['exhaustiveness']
 
 # check we have the correct starting files
-if os.path.isdir(ligandDirectory + "/" + inputType) != True:
+if os.path.isdir(ligandDirectory + "/" + inputType) != True and inputType != 'smilestext':
     log('There is no ' + inputType +
         ' folder in the ligand directory. Make sure there are files in there with a .' + inputType + ' extension, too.')
     sys.exit()
@@ -112,25 +112,31 @@ log('#', True),  log('Time Started: {0}'.format(
     strftime("%a, %d %b %Y %H:%M:%S", gmtime())).center(41), True),  log('#')
 log('# ----------------------------------------- #')
 
-# for a folder of separate files with smiles codes in
-if(inputType != 'smiles'):
-    if(can_write('smiles')):
-        log('\n'), log('{0} -> SMILES'.format(inputType.upper()).center(45))
-        make_folder('smiles')
-        open('smiles.txt', 'w').close()
-        for files in glob.glob('{0}/*.{1}'.format(inputType, inputType)):
-            b = os.path.splitext(os.path.basename(files))[0]
-            subprocess.call('obabel {0} -osmi -O smiles/{1}.txt'.format(
-                files, b), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            with open('smiles/{0}.txt'.format(b), 'r+') as smiles:
-                smile = smiles.read()
-                newsmile = smile.strip().split()[0]
-                smiles.seek(0)
-                smiles.write(newsmile)
-                smiles.truncate()
-                with open('smiles.txt'.format(b), 'a') as smiles:
-                    smiles.write('%s \n' % newsmile)
-            log('Writing smiles/{0}.txt'.format(b).center(45))
+# one .smi with lots of smiles codes
+if inputType == 'smilestext':
+    if can_write('smi'):
+        make_folder('smi')
+        print subprocess.call('obabel {0} -O smi/compound.smi -m'.format('smiles.smi'), shell=True)
+        subprocess.call('cp {0} smiles.txt'.format('smiles.smi'), shell=True)
+        log('Splitting smiles file'.center(45));
+        # we now can class the inputType as smi
+        inputType = 'smi'
+
+# create smi files if the input files aren't smi
+if(inputType != 'smi' and can_write('smi')):
+    use_obabel(inputType, 'smi', '--conformer --systematic -p')
+
+# create mol files if the input files aren't mol
+if(inputType != 'mol' and can_write('mol')):
+    use_obabel(inputType, 'mol', '--conformer --systematic -p')
+
+# create mol2 files if the input files aren't mol2
+if(inputType != 'mol2' and can_write('mol2')):
+    use_parallelized_obabel(inputType, 'mol2', '--gen3d --conformer --systematic -p')
+
+# create pdb files if the input files aren't pdb
+if(inputType != 'pdb' and can_write('pdb')):
+    use_obabel(inputType, 'pdb', '--gen3d --conformer --systematic -p')
 
 # producing images for each smiles
 if can_write('images'):
@@ -143,18 +149,6 @@ if can_write('images'):
             subprocess.call('obabel -:"{0}" -p 1000 -O images/{1}.svg'.format(
                 smile.strip(), b), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             log('Writing images/{0}.svg'.format(b).center(45))
-
-# create mol files if the input files aren't mol
-if(inputType != 'mol' and can_write('mol')):
-    use_obabel(inputType, 'mol', '--conformer --systematic -p')
-
-# create mol2 files if the input files aren't mol2
-if(inputType != 'mol2' and can_write('mol2')):
-    use_obabel(inputType, 'mol2', '--gen3d --conformer --systematic -p')
-
-# create pdb files if the input files aren't pdb
-if(inputType != 'pdb' and can_write('pdb')):
-    use_obabel(inputType, 'pdb', '--gen3d --conformer --systematic -p')
 
 # minimise
 if(can_write('pdb-minimised')):

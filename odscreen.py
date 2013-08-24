@@ -124,11 +124,11 @@ if inputType == 'smilestext':
 
 # create smi files if the input files aren't smi
 if(inputType != 'smi' and can_write('smi')):
-    use_obabel(inputType, 'smi', '--conformer --systematic -p')
+    use_parallelized_obabel(inputType, 'smi', '--conformer --systematic -p')
 
 # create mol files if the input files aren't mol
 if(inputType != 'mol' and can_write('mol')):
-    use_obabel(inputType, 'mol', '--conformer --systematic -p')
+    use_parallelized_obabel(inputType, 'mol', '--conformer --systematic -p')
 
 # create mol2 files if the input files aren't mol2
 if(inputType != 'mol2' and can_write('mol2')):
@@ -136,7 +136,7 @@ if(inputType != 'mol2' and can_write('mol2')):
 
 # create pdb files if the input files aren't pdb
 if(inputType != 'pdb' and can_write('pdb')):
-    use_obabel(inputType, 'pdb', '--gen3d --conformer --systematic -p')
+    use_parallelized_obabel(inputType, 'pdb', '--gen3d --conformer --systematic -p')
 
 # producing images for each smiles
 if can_write('images'):

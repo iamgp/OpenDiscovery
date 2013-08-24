@@ -15,7 +15,7 @@ from delegate import *
 #           a.marsh@warwick.ac.uk
 # -----------------------------------------
 
-VERSION=1.0.1
+VERSION="1.0.1"
 
 def make_folder(path):
     """Attempts folder creation
@@ -106,7 +106,7 @@ def use_parallelized_obabel(inputType, outputType, obabel_extra=''):
     y = []
     for cmpnd in glob.glob('{0}/*.{1}'.format(inputType, inputType)):
         b = os.path.splitext(os.path.basename(cmpnd))[0]
-        if len(x) > 20:
+        if len(x) > 10:
             parallelize(_execute_obabel, x)
             print ''
             print 'Written: ',

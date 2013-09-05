@@ -124,19 +124,19 @@ if inputType == 'smilestext':
 
 # create smi files if the input files aren't smi
 if(inputType != 'smi' and can_write('smi')):
-    use_parallelized_obabel(inputType, 'smi', '--conformer --systematic -p')
+    use_obabel(inputType, 'smi', '--conformer --systematic -p')
 
 # create mol files if the input files aren't mol
 if(inputType != 'mol' and can_write('mol')):
-    use_parallelized_obabel(inputType, 'mol', '--conformer --systematic -p')
+    use_obabel(inputType, 'mol', '--conformer --systematic -p')
 
 # create mol2 files if the input files aren't mol2
 if(inputType != 'mol2' and can_write('mol2')):
-    use_parallelized_obabel(inputType, 'mol2', '--gen3d --conformer --systematic -p')
+    use_obabel(inputType, 'mol2', '--gen3d --conformer --systematic -p')
 
 # create pdb files if the input files aren't pdb
 if(inputType != 'pdb' and can_write('pdb')):
-    use_parallelized_obabel(inputType, 'pdb', '--gen3d --conformer --systematic -p')
+    use_obabel(inputType, 'pdb', '--gen3d --conformer --systematic -p')
 
 # producing images for each smiles
 if can_write('images'):
@@ -277,9 +277,8 @@ with open('results/summary-sorted.csv', 'w') as file:
         if 'complex' not in cmpnd:
             b = os.path.basename(os.path.normpath(cmpnd))
             c = cmpnd + b + '_mode_1.pdb'
-            #print subprocess.call('pymol -c receptor/{0}.pdb {1}  -d \'save results/complexes/{2}.pdb \''.format(
-            #    receptorName, c, b), shell=True)
-            print subprocess.call('grep -h ATOM {0} {1} >| {2}'.format('receptor/'+receptorName+'.pdb', c, 'results/complexes/'+receptorName+'.pdb'), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True )
+            subprocess.call('pymol -c receptor/{0}.pdb {1}  -d \'save results/complexes/{2}.pdb \''.format(receptorName, c, b), shell=True)
+            #print subprocess.call('grep -h ATOM {0} {1} >| {2}'.format('receptor/'+receptorName+'.pdb', c, 'results/complexes/'+receptorName+'.pdb'), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True )
             log('Writing {0}'.format(b).center(45))
 
 log('\n'), log('# ----------------------------------------- #')

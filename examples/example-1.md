@@ -46,8 +46,10 @@ You should have a folder that looks like:
 <p style="text-align: center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/opendiscovery/4-dir.png"></p>
 
 
-### Running ODScreen
-We can now run the screening. First, let's check that everything is installed properly. In terminal, `cd` to the Protocol Folder (i.e. the folder with `odscreen.py`, `odparam.py` etc.) and run `python odcheck.py`. Check that there are no failures, and follow the installation guides if there are. You can ignore the warnings. Now, we can run the screening protocol. Navigate to the folder where hmg_coa.conf is located (from before). Now we can run `odscreen.py`. Make sure you use the correct path to the `odscreen.py` file.
+### Task 1: Compare Docked LVA to Crystal Structure
+In this task we run ODScreen to dock just the LVA molecule into the active site of the HMG CoA protein. Using both the resulting docked *and* crystal ligand-protein complex we can calculate an RMSD (Root Mean Squared Deviation) value, giving an indication of how well Vina performs.
+
+First, let's check that everything is installed properly. In terminal, `cd` to the Protocol Folder (i.e. the folder with `odscreen.py` etc.) and run `python odcheck.py`. Check that there are no failures, and follow the installation guides if there are. You can ignore the warnings. Now, we can run the screening protocol. Navigate to the folder where hmg_coa.conf is located (from before). Now we can run `python odscreen.py`. Make sure you use the correct path to the `odscreen.py` file.
 
 `python /protocolfolder/odscreen.py -d . -r hmg_coa -i pdb -c hmg_coa.conf`
 
@@ -127,4 +129,4 @@ The resulting files are:
 
 <p style="text-align: center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/opendiscovery/5-result_dir.png"></p>
 
-From this point on you can analyse the results. A starting point is to look at the binding energies, sorted and summarised in the `summary-sorted.csv` file. This should open in any text editor or programs like Excel.
+Once the protocol is complete, 

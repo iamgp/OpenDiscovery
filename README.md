@@ -2,7 +2,7 @@
 
 [www.opendiscovery.org.uk](http://www.opendiscovery.org.uk)
 
-Version: 1.0
+Version: 1.0.1
 
 Contacts: gareth.price@warwick.ac.uk; a.marsh@warwick.ac.uk
 

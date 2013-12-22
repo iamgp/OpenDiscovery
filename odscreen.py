@@ -202,7 +202,7 @@ elif(args['skip'] == False):
         useLibVina = 'vina' if testCommand(
             'vina') == True else '{0}/lib/vina'.format(protocolDirectory)
         subprocess.call('{0} --receptor receptor/{1}.pdbqt --ligand pdbqt/{2}.pdbqt --config {3} --out results/{4}/out.pdbqt --log results/{5}/log.txt --exhaustiveness {6}'.format(
-            useLibVina, receptorName, b, args['conf'], b, b, exhaustiveness), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            useLibVina, receptorName, b, args['conf'], b, b, exhaustiveness), shell=True)
 elif(args['skip'] == True):
     log('\n', 'Skipping screening'.center(45).upper())
 

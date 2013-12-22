@@ -11,7 +11,7 @@ print('# Contacts: gareth.price@warwick.ac.uk      #')
 print('#           a.marsh@warwick.ac.uk           #')
 print('# ----------------------------------------- #')
 
-dependencies = { 'obabel' : 'http://openbabel.org/wiki/Get_Open_Babel', 'python' : 'http://www.python.org/getit/', 'lib/vina': 'http://vina.scripps.edu/download.html' }
+dependencies = {'pymol': 'http://pymol.com', 'obabel' : 'http://openbabel.org/wiki/Get_Open_Babel', 'python' : 'http://www.python.org/getit/', 'lib/vina': 'http://vina.scripps.edu/download.html' }
 
 
 print('\n')

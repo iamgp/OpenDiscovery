@@ -15,7 +15,7 @@ from delegate import *
 #           a.marsh@warwick.ac.uk
 # -----------------------------------------
 
-VERSION="1.0.1"
+VERSION="1.0.2"
 
 def make_folder(path):
     """Attempts folder creation
@@ -83,6 +83,8 @@ def testCommand(commandToTest):
     else:
         return False
 
+def get_obabel_version():
+    return subprocess.call('obabel -V', shell=True)
 
 def use_obabel(inputType, outputType, obabel_extra=''):
     """ Wrapper for Open Babel (must be installed)

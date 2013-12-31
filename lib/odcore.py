@@ -9,7 +9,7 @@ from delegate import *
 #              OPEN DISCOVERY
 #        CORE FUNCTIONs (LEAVE ALONE)
 # -----------------------------------------
-# Version:  1.0
+# Version:  1.0.2
 # URL:      www.opendiscovery.org.uk
 # Contacts: gareth.price@warwick.ac.uk
 #           a.marsh@warwick.ac.uk

@@ -12,7 +12,7 @@ You can follow along with this example by downloading the initial PDB from [here
 ### Preparing the files
 We first need to split the crystal structure of the complex into separate receptor and ligand files.
 The first section of a PDB is normally the HEADER, with notes about the structure and how it was acquired. We can easily grab just the ATOM lines by using `grep` in terminal:
- 
+
 `grep "^ATOM\|^TER" 2P1Q.pdb > ubq_lig.pdb`
 
 Here the `^` symbol is saying "find all the lines which start with ATOM or (\\|) TER", and then the filename, then we "pipe" all the output into a new file, `receptor.pdb`.
@@ -62,72 +62,72 @@ First, let's check that everything is installed properly. In terminal, `cd` to t
 This is the result:
 
 ```
-# ----------------------------------------- #
-#              OPEN DISCOVERY               #
-#             Screening Module              #
-# ----------------------------------------- #
-# Version:  1.0.1                             #
-# URL:      www.opendiscovery.org.uk        #
-# Contacts: gareth.price@warwick.ac.uk      #
-#           a.marsh@warwick.ac.uk           #
-# ----------------------------------------- #
-#  LigDir: /Users/garethprice/Desktop/rmsd  #
-#           Receptor Name: ubq_lig          #
-#              Input Type: pdb              #
-#             Conf: ubq_lig.conf            #
-#             Exhaustivness: 50             #
-# ----------------------------------------- #
-#  Time Started: Thu, 12 Sep 2013 23:25:55  #
-# ----------------------------------------- #
+ # ----------------------------------------- #
+ #              OPEN DISCOVERY               #
+ #             Screening Module              #
+ # ----------------------------------------- #
+ # Version:  1.0.1                             #
+ # URL:      www.opendiscovery.org.uk        #
+ # Contacts: gareth.price@warwick.ac.uk      #
+ #           a.marsh@warwick.ac.uk           #
+ # ----------------------------------------- #
+ #  LigDir: /Users/garethprice/Desktop/rmsd  #
+ #           Receptor Name: ubq_lig          #
+ #              Input Type: pdb              #
+ #             Conf: ubq_lig.conf            #
+ #             Exhaustivness: 50             #
+ # ----------------------------------------- #
+ #  Time Started: Thu, 12 Sep 2013 23:25:55  #
+ # ----------------------------------------- #
 
 
-                     SMI
-             Writing smi/IAC.smi
+                      SMI
+              Writing smi/IAC.smi
 
 
-                     MOL
-             Writing mol/IAC.mol
+                      MOL
+              Writing mol/IAC.mol
 
 
-                     MOL2
-            Writing mol2/IAC.mol2
+                      MOL2
+             Writing mol2/IAC.mol2
 
 
-                    IMAGES
+                     IMAGES
 
 
-                 MINIMISATION
-                Minimising IAC
+                  MINIMISATION
+                 Minimising IAC
 
 
-               PDBQT PREPARATION
-              Writing IAC.pdbqt
+                PDBQT PREPARATION
+               Writing IAC.pdbqt
 
 
-                   SCREENING
-                Processing IAC
+                    SCREENING
+                 Processing IAC
 
 
-                  EXTRACTING
-           Processing results/IAC/
+                   EXTRACTING
+            Processing results/IAC/
 
 
-                  PDB -> MOL2
-        Writing results-mol2/IAC.mol2
+                   PDB -> MOL2
+         Writing results-mol2/IAC.mol2
 
 
-                  SUMMARISING
-               Summarising IAC
+                   SUMMARISING
+                Summarising IAC
 
 
-               MAKING COMPLEXES
-                 Writing IAC
+                MAKING COMPLEXES
+                  Writing IAC
 
 
-# ----------------------------------------- #
-#                  FINSHED                  #
-#         Time Taken: 54.57 seconds         #
-# ----------------------------------------- #
+ # ----------------------------------------- #
+ #                  FINSHED                  #
+ #         Time Taken: 54.57 seconds         #
+ # ----------------------------------------- #
 ```
 
 The resulting files are:
@@ -159,41 +159,41 @@ Move this into the folder where your `ubq_lig.conf` file is located. Rename the 
 
 
  You can run `odscreen` on the smiles.smi file with:
- 
+
 `python /protocolfolder/odscreen -d . -r ubq_lig -i smilestext -c ubq_lig.conf`
 
 This produces:
 
 ```
-# ----------------------------------------- #
-#              OPEN DISCOVERY               #
-#             Screening Module              #
-# ----------------------------------------- #
-# Version:  1.0.1                             #
-# URL:      www.opendiscovery.org.uk        #
-# Contacts: gareth.price@warwick.ac.uk      #
-#           a.marsh@warwick.ac.uk           #
-# ----------------------------------------- #
-#  LigDir: /Users/garethprice/Desktop/rmsd  #
-#           Receptor Name: ubq_lig          #
-#           Input Type: smilestext          #
-#             Conf: ubq_lig.conf            #
-#             Exhaustivness: 20             #
-# ----------------------------------------- #
-#  Time Started: Thu, 12 Sep 2013 23:46:58  #
-# ----------------------------------------- #
-996 molecules converted
-996 files output. The first is smi/compound1.smi
-0
-            Splitting smiles file
+ # ----------------------------------------- #
+ #              OPEN DISCOVERY               #
+ #             Screening Module              #
+ # ----------------------------------------- #
+ # Version:  1.0.1                             #
+ # URL:      www.opendiscovery.org.uk        #
+ # Contacts: gareth.price@warwick.ac.uk      #
+ #           a.marsh@warwick.ac.uk           #
+ # ----------------------------------------- #
+ #  LigDir: /Users/garethprice/Desktop/rmsd  #
+ #           Receptor Name: ubq_lig          #
+ #           Input Type: smilestext          #
+ #             Conf: ubq_lig.conf            #
+ #             Exhaustivness: 20             #
+ # ----------------------------------------- #
+ #  Time Started: Thu, 12 Sep 2013 23:46:58  #
+ # ----------------------------------------- #
+  996 molecules converted
+  996 files output. The first is smi/compound1.smi
+  0
+             Splitting smiles file
 
 
-                     MOL
-          Writing mol/compound1.mol
-          Writing mol/compound10.mol
-         Writing mol/compound100.mol
-         
-. . . . . .
+                      MOL
+           Writing mol/compound1.mol
+           Writing mol/compound10.mol
+          Writing mol/compound100.mol
+
+ . . . . . .
 ```
 
 Once docked, you can perform analysis (visual or otherwise) on the docked complexes. A list (`summary-sorted.csv`) is produced which ranks the ligands based on their calculated free binding energy. This can be opened in Excel or a normal text editor.

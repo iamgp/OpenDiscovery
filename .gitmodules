@@ -1,0 +1,3 @@
+[submodule "pyPDB"]
+	path = pyPDB
+	url = git://github.com/iamgp/pyPDB.git

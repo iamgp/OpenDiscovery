@@ -135,7 +135,7 @@ class pyPDB(object):
         plt.colorbar()
 
         if save == True:
-            plt.savefig('{}/distance_map.pdf'.format(directory))
+            plt.savefig('{}distance_map.pdf'.format(directory))
 
         if close == True:
             plt.close()

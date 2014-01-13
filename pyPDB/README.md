@@ -1,4 +1,0 @@
-pyPDB
-=====
-
-pyPDB class Readme

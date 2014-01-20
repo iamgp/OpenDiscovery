@@ -28,7 +28,6 @@ def make_folder(path):
         if exception.errno != errno.EEXIST:
             raise
 
-
 def try_remove(filename):
     """Attempts file deletion
 

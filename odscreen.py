@@ -45,34 +45,25 @@ def should_extract():
             return True
 
 # set up arguments parser
-parser = argparse.ArgumentParser(
-    description='Open Discovery Screening Protocol')
-parser.add_argument(
-    '-a', '--append', help='If this is true, only new folders will be added.',  action='store_true')
-parser.add_argument(
-    '-c', '--conf', help='RELATIVE path to the conf file (wrt ligand directory). Default = conf.txt', default="conf.txt")
-parser.add_argument('-d', '--directory',
-                    help='Path to the ligand directory. Required!', required=True)
-parser.add_argument('-e', '--exhaustiveness',
-                    help='Exhaustiveness. Default = 20.', type=int, default=20)
-parser.add_argument('-g', '--genjobfile',
-                    help='Generate a job file for cluster use. This will stop the protocol after creation.', action='store_true')
-parser.add_argument(
-    '-i', '--input', help='Input file type. Must be readable by OBabel. Files must be in folder of the same name. e.g. mol/X.mol if $ -i mol', required=True)
-parser.add_argument(
-    '-r', '--receptor', help='Receptor Name. Must be located within the receptor folder. Default = receptor.', default='receptor')
-parser.add_argument(
-    '-s', '--skip', help='Skip the screening?', action='store_true')
+parser = argparse.ArgumentParser(description='Open Discovery Screening Protocol')
+parser.add_argument('-a', '--append', help='If this is true, only new folders will be added.',  action='store_true')
+parser.add_argument('-c', '--conf', help='RELATIVE path to the conf file (wrt ligand directory). Default = conf.txt', default="conf.txt")
+parser.add_argument('-d', '--directory',help='Path to the ligand directory. Required!', required=True)
+parser.add_argument('-e', '--exhaustiveness',help='Exhaustiveness. Default = 20.', type=int, default=20)
+parser.add_argument('-g', '--genjobfile',help='Generate a job file for cluster use. This will stop the protocol after creation.', action='store_true')
+parser.add_argument('-i', '--input', help='Input file type. Must be readable by OBabel. Files must be in folder of the same name. e.g. mol/X.mol if $ -i mol', required=True)
+parser.add_argument('-r', '--receptor', help='Receptor Name. Must be located within the receptor folder. Default = receptor.', default='receptor')
+parser.add_argument('-s', '--skip', help='Skip the screening?', action='store_true')
 args = vars(parser.parse_args())
 
 # set up some nicer names for commonly used arguments
-inputType = args['input']
+inputType         = args['input']
 protocolDirectory = os.path.abspath(os.path.split(sys.argv[0])[0])
-ligandDirectory = os.path.abspath(args['directory'])
+ligandDirectory   = os.path.abspath(args['directory'])
+onlyAppend        = args['append']
+receptorName      = args['receptor']
+exhaustiveness    = args['exhaustiveness']
 os.chdir(ligandDirectory)
-onlyAppend = args['append']
-receptorName = args['receptor']
-exhaustiveness = args['exhaustiveness']
 
 # check we have the correct starting files
 if os.path.isdir(ligandDirectory + "/" + inputType) != True and inputType != 'smilestext':
@@ -219,9 +210,7 @@ for cmpnd in glob.glob('results/*/'):
         os.chdir('{0}/{1}'.format(ligandDirectory, cmpnd))
         subprocess.call('awk -f {0}/lib/extract.awk < out.pdbqt'.format(
             protocolDirectory), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        for mode in glob.glob('mode_*.pdb'):
-            os.rename(mode, '{0}_{1}'.format(b, mode))
-os.chdir(ligandDirectory)
+eos.chdir(ligandDirectory)
 # else:
 # 	log('Skipping extraction')
 

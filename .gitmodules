@@ -1,6 +1,3 @@
-[submodule "pyPDB"]
-	path = pyPDB
-	url = git://github.com/iamgp/pyPDB.git
 [submodule "OpenDiscovery/pyPDB"]
 	path = OpenDiscovery/pyPDB
 	url = https://github.com/iamgp/pyPDB.git

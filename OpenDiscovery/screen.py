@@ -29,11 +29,14 @@ class Screen(object):
 
 		# let's see if there's an od.json file
 		if os.path.isfile(self.ligandDir + '/od.json'):
-			data = json.load(open(self.ligandDir + '/od.json'))
-			self.ligands = data['ligands']
-			self.minimised = data['minimised']
-			self.pdbqt = data['pdbqt']
-			self.results = data['results']
+			try:
+				data = json.load(open(self.ligandDir + '/od.json'))
+				self.ligands = data['ligands']
+				self.minimised = data['minimised']
+				self.pdbqt = data['pdbqt']
+				self.results = data['results']
+			except:
+				pass
 
 		# Actions
 		self._checkStart()
@@ -47,7 +50,7 @@ class Screen(object):
 
 		# Save files
 		data = { 'ligands': self.ligands, 'minimised': self.minimised, 'pdbqt': self.pdbqt, 'results': self.results }
-		json.dump(data, open(self.ligandDir + '/od.json', 'wb'))
+		json.dump(data, open(self.ligandDir + '/od.json', 'wb'), None, 4)
 
 	def parser(self):
 		parser = argparse.ArgumentParser(description='Open Discovery Screening Protocol')

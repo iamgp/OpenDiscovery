@@ -1,6 +1,7 @@
 <p align="center"><img src="http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/logo.png" width="300px" /></p>
 
 [www.opendiscovery.org.uk](http://www.opendiscovery.org.uk)
+[www.opendiscovery.co.uk](http://www.opendiscovery.co.uk)
 
 Version: 1.0.1
 

@@ -17,7 +17,7 @@ if __name__ == '__main__':
 	# or hard code them in
 	options                   = {}
 	options['directory']      = '~/Desktop/od2/'
-	options['receptor']       = 'ddx3_closed'
+	options['receptor']       = 'receptor'
 	options['exhaustiveness'] = 1
 	options['driver'] 		  = 'vina'
 

@@ -1,4 +1,10 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+__author__ = 'Gareth Price'
+__email__ = 'gareth.price@warwick.ac.uk'
+__version__ = '2.0.0'
+
 import sys, os, errno
 
 def log(message="", verbose=True, colour=None, background=None, bold=False, underline=False, inverted=False, run=False):

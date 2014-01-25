@@ -6,7 +6,7 @@ import sys
 
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -19,20 +19,17 @@ readme = open('README.md').read()
 setup(
     name='OpenDiscovery',
     version='2.0.0',
-    description='Computational Drug Discovery',
+    description='Computational Drug Discovery Software',
     long_description=readme,
     author='Gareth Price',
     author_email='gareth.price@warwick.ac.uk',
     url='https://github.com/iamgp/OpenDiscovery',
-    packages=[
-        'OpenDiscovery',
-    ],
+    packages=find_packages(),
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
     include_package_data=True,
     install_requires=[
     ],
-    license="BSD",
-    zip_safe=False,
+    license="GPL",
     keywords='OpenDiscovery',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -45,6 +42,5 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
     ],
-    test_suite='tests',
     scripts=['odscreen.py']
 )

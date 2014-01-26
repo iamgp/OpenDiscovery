@@ -14,18 +14,15 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-readme = open('README.md').read()
-
 setup(
     name='OpenDiscovery',
-    version='2.0.0',
-    release='2.0.0',
+    version='2.0.2',
+    release='0',
     description='Computational Drug Discovery Software',
-    long_description=readme,
     author='Gareth Price',
     author_email='gareth.price@warwick.ac.uk',
     url='https://github.com/iamgp/OpenDiscovery',
-    packages=find_packages(),
+    packages=['OpenDiscovery', 'OpenDiscovery.pyPDB'],
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
     package_data={'OpenDiscovery': ['lib/vina-osx/*', 'lib/vina-linux/*', 'lib/*.aw']},
     include_package_data=True,
@@ -34,15 +31,12 @@ setup(
     license="GPL",
     keywords='OpenDiscovery',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
     ],
     scripts=['odscreen.py']
 )

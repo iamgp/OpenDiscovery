@@ -1,8 +1,10 @@
  #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import OpenDiscovery as od
 import OpenDiscovery.screen as ODScreen
 import argparse
+from time import gmtime, strftime, time
 
 if __name__ == '__main__':
 
@@ -17,9 +19,13 @@ if __name__ == '__main__':
 	# or hard code them in
 	options                   = {}
 	options['directory']      = '~/Desktop/od2/'
-	options['receptor']       = 'ddx3_closed'
+	options['receptor']       = 'receptor'
 	options['exhaustiveness'] = 1
 	options['driver'] 		  = 'vina'
+
+	# let's time it
+	t = time()
+
 
 	# set up a new screen instance
 	s = ODScreen.Screen(
@@ -29,3 +35,6 @@ if __name__ == '__main__':
 			exhaustiveness 	= options['exhaustiveness'],
 			driver 			= options['driver']
 		)
+
+	od.logHeader('Time Taken: {0:.2f} seconds'.format(time() - t))
+	print '\n'

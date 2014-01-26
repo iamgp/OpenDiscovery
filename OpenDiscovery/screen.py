@@ -47,7 +47,6 @@ class Screen(object):
 		self.performScreening()
 		self.extractModels()
 		self.gatherResults()
-		print '\n\n'
 
 		# Save files
 		self.save()

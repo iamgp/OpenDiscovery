@@ -57,7 +57,7 @@ class ProgressBar(object):
 
     def __init__(self, progress, total, symbol="█"):
         percentage = (progress*100) / total
-        bar = "     \033[94m"+ (symbol* (4*percentage/20)) +"\033[0m"  + (symbol * (20 - (4*percentage/20)) ) + " " + str(percentage) + "%"
+        bar = "     \033[94m"+ (symbol* (4*percentage/20)) +"\033[0m"  + (symbol * (20 - (4*percentage/20)) ) + " " + str(progress) + "/" + str(total)
         sys.stdout.write('\r'+bar)
         sys.stdout.flush()
 

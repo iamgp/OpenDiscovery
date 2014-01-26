@@ -1,9 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 __author__ = 'Gareth Price'
 __email__ = 'gareth.price@warwick.ac.uk'
-__version__ = '2.0.0'
+__version__ = '2.0.4'
 
 import sys, os, errno
 

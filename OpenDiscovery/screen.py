@@ -27,26 +27,26 @@ class Screen(object):
 			self.options['exhaustiveness'] = exhaustiveness
 			self.options['driver'] = driver
 
-		self.protocolDir = os.path.abspath(os.path.split(sys.argv[0])[0])
-		self.ligandDir = os.path.abspath(os.path.expanduser(self.options['directory']))
+		self.protocol_dir = os.path.abspath(os.path.split(sys.argv[0])[0])
+		self.ligand_dir = os.path.abspath(os.path.expanduser(self.options['directory']))
 		self.ligands = {}
 		self.minimised = []
 		self.pdbqt = []
 		self.results = {}
 		self.total = 0
-		self.sortedResults = []
+		self.sorted_results = []
 
 		# let's see if there's an od.json file
 		self.load()
 
 		# Actions
-		self._checkStart()
-		self._convertFiles()
-		self._minimise()
-		self._preparePDBQT()
-		self._performScreening()
-		self._extractModels()
-		self._gatherResults()
+		self.__checkStart()
+		self.convertFiles()
+		self.minimise()
+		self.preparePDBQT()
+		self.performScreening()
+		self.extractModels()
+		self.gatherResults()
 		print '\n\n'
 
 		# Save files
@@ -59,12 +59,12 @@ class Screen(object):
 			'pdbqt': self.pdbqt,
 			'results': self.results
 		}
-		json.dump(data, open(self.ligandDir + '/od.json', 'wb'))
+		json.dump(data, open(self.ligand_dir + '/od.json', 'wb'))
 
 	def load(self):
-		if os.path.isfile(self.ligandDir + '/od.json'):
+		if os.path.isfile(self.ligand_dir + '/od.json'):
 			try:
-				data = json.load(open(self.ligandDir + '/od.json'))
+				data = json.load(open(self.ligand_dir + '/od.json'))
 				self.ligands = data['ligands']
 				self.minimised = data['minimised']
 				self.pdbqt = data['pdbqt']
@@ -80,12 +80,12 @@ class Screen(object):
 		parser.add_argument('-r', '--receptor', help='Receptor Name. Must be located within the receptor folder. Default = receptor.', default='receptor')
 		return vars(parser.parse_args())
 
-	def _checkStart(self):
-		if os.path.isdir(self.ligandDir+"/ligands") != True:
+	def __checkStart(self):
+		if os.path.isdir(self.ligand_dir+"/ligands") != True:
 			log("There is no ligand directory", colour="red")
 			sys.exit()
 		else:
-			for cmpnd in glob.glob('{ld}/ligands/*'.format(ld=self.ligandDir)):
+			for cmpnd in glob.glob('{ld}/ligands/*'.format(ld=self.ligand_dir)):
 				f = os.path.splitext(os.path.basename(cmpnd))
 
 				if f[0] not in self.ligands:
@@ -96,7 +96,7 @@ class Screen(object):
 
 		self.total = self.numberOfLigands()
 
-	def _header(self):
+	def __header(self):
 		log('')
 		log('+------------------------------------+')
 		log('|           OPEN DISCOVERY           |')
@@ -109,64 +109,56 @@ class Screen(object):
 	def numberOfLigands(self):
 		return len(self.ligands)
 
-	def _convertFiles(self):
-		self._header()
-		i = 0
-		log_header('Converting Files')
-		for cmpnd in self.ligands:
-			i = i + 1
-			ProgressBar(i, self.total)
+	def convertFiles(self):
+		self.__header()
+		logHeader('Converting Files')
+		for index, cmpnd in enumerate(self.ligands):
+			ProgressBar(index+1, self.total)
 
 			extension = self.ligands[cmpnd]
-			full_name = self.ligandDir+'/ligands/'+cmpnd+extension
+			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
 
 			if self.ligands[cmpnd] != '.pdb':
-				subprocess.call('obabel {compound} -O {ld}/ligands/{name}.pdb --gen3d --conformer --systematic -p'.format(compound=full_name, ld=self.ligandDir, name=cmpnd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+				subprocess.call('obabel {compound} -O {ld}/ligands/{name}.pdb --gen3d --conformer --systematic -p'.format(compound=full_name, ld=self.ligand_dir, name=cmpnd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 				self.ligands[cmpnd] = '.pdb'
 
 		self.save()
 
-	def _minimise(self):
-		i = 0
-		log_header('Minimising Ligands')
-		for cmpnd in self.ligands:
-			i = i + 1
-			ProgressBar(i, self.total)
+	def minimise(self):
+		logHeader('Minimising Ligands')
+		for index, cmpnd in enumerate(self.ligands):
+			ProgressBar(index+1, self.total)
 
 			extension = self.ligands[cmpnd]
-			full_name = self.ligandDir+'/ligands/'+cmpnd+extension
+			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
 
 			if cmpnd not in self.minimised:
-				subprocess.call('obminimize -sd -c 1e-5 {ld}/ligands/{name}.pdb'.format(ld=self.ligandDir, name=cmpnd),stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+				subprocess.call('obminimize -sd -c 1e-5 {ld}/ligands/{name}.pdb'.format(ld=self.ligand_dir, name=cmpnd),stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 				self.minimised.append(cmpnd)
 
 		self.save()
 
-	def _preparePDBQT(self):
-		i = 0
-		log_header('Preparing PDBQTs')
-		for cmpnd in self.ligands:
-			i = i + 1
-			ProgressBar(i, self.total)
+	def preparePDBQT(self):
+		logHeader('Preparing PDBQTs')
+		for index, cmpnd in enumerate(self.ligands):
+			ProgressBar(index+1, self.total)
 
 			extension = self.ligands[cmpnd]
-			full_name = self.ligandDir+'/ligands/'+cmpnd+extension
+			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
 
 			if cmpnd not in self.pdbqt:
 				subprocess.call('obabel {compound} -O {ld}/ligands/{name}.pdbqt'.format(
-         		   compound=full_name, ld=self.ligandDir, name=cmpnd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+         		   compound=full_name, ld=self.ligand_dir, name=cmpnd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 				self.pdbqt.append(cmpnd)
 
 		self.save()
 
-	def _performScreening(self):
-		log_header('Perform Screening')
-		i = 0
-		for cmpnd in self.pdbqt:
-			i = i + 1
-			ProgressBar(i, self.total)
+	def performScreening(self):
+		logHeader('Perform Screening')
+		for index, cmpnd in enumerate(self.pdbqt):
+			ProgressBar(index+1, self.total)
 
-			full_name = self.ligandDir+'/ligands/'+cmpnd+'.pdbqt'
+			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
 
 			if cmpnd not in self.results:
 				if self.options['driver'].lower() == 'vina':
@@ -178,21 +170,20 @@ class Screen(object):
 				self.results[cmpnd] = 0
 
 
-	def _extractModels(self):
-		log_header('Extracting Models')
-		i = 0
-		for cmpnd in self.results:
-			full_name = self.ligandDir+'/ligands/'+cmpnd+'.pdbqt'
+	def extractModels(self):
+		logHeader('Extracting Models')
+		for index, cmpnd in enumerate(self.results):
+			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
 
-			results_folder = self.ligandDir + "/results"
-			results_location = self.ligandDir + "/results/" + cmpnd + ".pdbqt"
+			results_folder = self.ligand_dir + "/results"
+			results_location = self.ligand_dir + "/results/" + cmpnd + ".pdbqt"
 
 			os.chdir(results_folder)
 
 			subprocess.call('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(
-				pd=self.protocolDir, results=results_location), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+				pd=self.protocol_dir, results=results_location), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
-			make_folder(cmpnd)
+			makeFolder(cmpnd)
 
 			for mode in glob.glob('mode_*.pdb'):
 				os.rename(mode, '{0}/{0}_{1}'.format(cmpnd, mode))
@@ -203,16 +194,14 @@ class Screen(object):
 			except:
 				pass
 
-			i = i + 1
-			ProgressBar(i, self.total)
+			ProgressBar(index+1, self.total)
 
-	def _gatherResults(self):
-		log_header('Gathering Results')
-		i = 0
+	def gatherResults(self):
+		logHeader('Gathering Results')
 
-		results_folder = self.ligandDir + "/results"
+		results_folder = self.ligand_dir + "/results"
 		open(results_folder+'/summary.csv', 'w').close()
-		for result in glob.glob(results_folder+'/*/'):
+		for index, result in enumerate(glob.glob(results_folder+'/*/')):
 		    b = os.path.basename(os.path.normpath(result))
 		    with open('{0}/{1}.txt'.format(result, b)) as file:
 		        for line in file:
@@ -226,12 +215,11 @@ class Screen(object):
 		    sortedlist = sorted(reader, key=operator.itemgetter(1), reverse=True)
 		    self.results[b] = energy
 
-		    i = i + 1
-		    ProgressBar(i, self.total)
+		    ProgressBar(index+1, self.total)
 
 		with open(results_folder+'/summary.csv', 'w') as file:
 			for line in sortedlist:
 				file.write(line[0] + ', ' + line[1] + '\n')
 
-		self.sortedResults = sortedlist
+		self.sorted_results = sortedlist
 

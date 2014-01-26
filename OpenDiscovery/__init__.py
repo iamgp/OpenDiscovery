@@ -47,7 +47,7 @@ def log(message="", verbose=True, colour=None, background=None, bold=False, unde
 
     return
 
-def log_header(message):
+def logHeader(message):
     message = '\033[1m' + message + '\033[21m'
     message = '\n\n\033[34m ==> \033[0m'+ message
     print message
@@ -61,7 +61,7 @@ class ProgressBar(object):
         sys.stdout.write('\r'+bar)
         sys.stdout.flush()
 
-def make_folder(path):
+def makeFolder(path):
     """Attempts folder creation
 
         Tries to create a folder. Raises an exception if one exists already/

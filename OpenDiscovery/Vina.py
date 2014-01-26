@@ -20,9 +20,9 @@ class Vina(object):
 		self.screen = screen
 
 		if 'linux' in sys.platform:
-			self.locations['vina'] = screen.protocolDir + "/lib/vina-linux/vina"
+			self.locations['vina'] = screen.protocolDir + "/OpenDiscovery/lib/vina-linux/vina"
 		elif 'darwin' in sys.platform:
-			self.locations['vina'] = screen.protocolDir + "/lib/vina-osx/vina"
+			self.locations['vina'] = screen.protocolDir + "/OpenDiscovery/lib/vina-osx/vina"
 
 			self.locations['receptor'] = screen.ligandDir + "/receptor/" + screen.options['receptor'] + ".pdbqt"
 			self.locations['ligand'] = screen.ligandDir + "/ligands/" + cmpnd + ".pdbqt"

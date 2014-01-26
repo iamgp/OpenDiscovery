@@ -19,6 +19,7 @@ readme = open('README.md').read()
 setup(
     name='OpenDiscovery',
     version='2.0.0',
+    release='2.0.0',
     description='Computational Drug Discovery Software',
     long_description=readme,
     author='Gareth Price',
@@ -26,6 +27,7 @@ setup(
     url='https://github.com/iamgp/OpenDiscovery',
     packages=find_packages(),
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
+    package_data={'OpenDiscovery': ['lib/vina-osx/*', 'lib/vina-linux/*', 'lib/*.aw']},
     include_package_data=True,
     install_requires=[
     ],

@@ -189,7 +189,7 @@ class Screen(object):
 
 			os.chdir(results_folder)
 
-			subprocess.call('awk -f {pd}/lib/extract.awk < {results}'.format(
+			subprocess.call('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(
 				pd=self.protocolDir, results=results_location), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
 			make_folder(cmpnd)

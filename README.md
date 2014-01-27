@@ -3,6 +3,9 @@
 [www.opendiscovery.org.uk](http://www.opendiscovery.org.uk)
 [www.opendiscovery.co.uk](http://www.opendiscovery.co.uk)
 
+[![Build Status](https://travis-ci.org/iamgp/OpenDiscovery.png)](https://travis-ci.org/iamgp/OpenDiscovery)
+
+
 Version: 2.0.4
 
 Contacts: <gareth.price@warwick.ac.uk>; <a.marsh@warwick.ac.uk>

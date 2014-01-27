@@ -15,12 +15,16 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+
 setup(
     name='OpenDiscovery',
     version=od.__version__,
     release='0',
     description='Computational Drug Discovery Software',
-    long_description='Open Discovery is a suite of programs that use Open Source or freely available tools to dock a library of chemical compounds against a receptor protein. In a (currently submitted) paper in the Journal ofChemical Education, we outline the usefulness of having anuncomplicated, free-to-use protocol to accomplish a task that has been the subject of academic and commercial interest for decades. We also highlight the gaps in open source tools around preparing protein-ligand complexes for molecular simulation, an area we expect to developin the future.',
+    long_description=read('README.rst'),
     author='Gareth Price',
     author_email='gareth.price@warwick.ac.uk',
     maintainer='Gareth Price',

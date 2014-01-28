@@ -222,3 +222,9 @@ class Screen(object):
 
 		self.sorted_results = sortedlist
 
+class ScreenTests(object):
+	def __init__(self, args):
+		self.passed = args
+
+	def checkSetup(self):
+		return self.passed

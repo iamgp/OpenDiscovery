@@ -7,4 +7,5 @@ python:
 install:
   - pip install -q -e . --use-mirrors
 # command to run tests, e.g. python setup.py test
-script:  python setup.py test
+script:
+  nosetests

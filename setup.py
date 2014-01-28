@@ -5,7 +5,6 @@ import os
 import sys
 import OpenDiscovery as od
 
-
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -17,7 +16,6 @@ if sys.argv[-1] == 'publish':
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
 
 setup(
     name='OpenDiscovery',

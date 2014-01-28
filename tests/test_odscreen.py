@@ -1,8 +1,5 @@
 from OpenDiscovery.screen import ScreenTests as screenTest
 
-
-
-
-def testss():
+def tests():
 	t = screenTest('test')
 	assert t.checkSetup() == 'test'

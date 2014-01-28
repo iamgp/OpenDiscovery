@@ -2,11 +2,20 @@
 
 __author__ = 'Gareth Price'
 __email__ = 'gareth.price@warwick.ac.uk'
-__version__ = '2.0.5'
+__version__ = '2.0.6'
 
-import sys, os, errno
+import sys
+import os
+import errno
+
 
 def log(message="", verbose=True, colour=None, background=None, bold=False, underline=False, inverted=False, run=False):
+    """ log() prints a message that is formatted properly.
+
+        Using ANSI colour and formatting strings, log() prints out a formatted
+        string. If run=True, the following print command (or log())
+        will appear on the same line.
+    """
 
     if verbose:
 
@@ -33,11 +42,17 @@ def log(message="", verbose=True, colour=None, background=None, bold=False, unde
             'white':    '107'
         }
 
-        if bold:                   message = '\033[1m' + message + '\033[21m'
-        if underline:              message = '\033[4m' + message + '\033[24m'
-        if background is not None: message = '\033[' + backgrounds[background] + 'm' + message + '\033[49m'
-        if colour is not None:     message = '\033[' + colours[colour] + 'm' + message + '\033[0m'
-        if inverted:               message = '\033[7m' + message + '\033[27m'
+        if bold:
+            message = '\033[1m' + message + '\033[21m'
+        if underline:
+            message = '\033[4m' + message + '\033[24m'
+        if background is not None:
+            message = '\033[' + backgrounds[background] + \
+                'm' + message + '\033[49m'
+        if colour is not None:
+            message = '\033[' + colours[colour] + 'm' + message + '\033[0m'
+        if inverted:
+            message = '\033[7m' + message + '\033[27m'
 
         if run:
             print message,
@@ -46,19 +61,25 @@ def log(message="", verbose=True, colour=None, background=None, bold=False, unde
 
     return
 
+
 def logHeader(message):
+    """logHeader() prints out a formatted message which is used for heading sections."""
     message = '\033[1m' + message + '\033[21m'
-    message = '\n\n\033[34m ==> \033[0m'+ message
+    message = '\n\n\033[34m ==> \033[0m' + message
     print message
 
+
 class ProgressBar(object):
-    """docstring for ProgressBar"""
+    """A Simple class for showing a progress bar to the user"""
 
     def __init__(self, progress, total, symbol="█"):
-        percentage = (progress*100) / total
-        bar = "     \033[94m"+ (symbol* (4*percentage/20)) +"\033[0m"  + (symbol * (20 - (4*percentage/20)) ) + " " + str(progress) + "/" + str(total)
-        sys.stdout.write('\r'+bar)
+        percentage = (progress * 100) / total
+        bar = "     \033[94m" + (symbol * (4 * percentage / 20)) + "\033[0m"  + \
+            (symbol * (20 - (4 * percentage / 20)) ) + \
+            " " + str(progress) + "/" + str(total)
+        sys.stdout.write('\r' + bar)
         sys.stdout.flush()
+
 
 def makeFolder(path):
     """Attempts folder creation

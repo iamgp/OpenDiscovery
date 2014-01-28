@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from . import *
-from pyPDB import pyPDB
-from Vina import *
 import os
 import sys
 import subprocess
@@ -10,14 +8,16 @@ import json
 import shutil
 import csv
 import operator
-
-__VERSION__ = "2.0.0a"
+from Vina import *
+#from pyPDB import pyPDB
 
 class Screen(object):
-	"""docstring for Screen"""
-	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '', driver = ''):
-		# Variables
+	"""	A Screening object that can be used to perform docking of ligands to a receptor.
 
+		Instantiates variables variables and runs methods that perform the screening.
+	"""
+
+	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '', driver = ''):
 		self.options = {}
 		if parse:
 			self.options = self.parser()
@@ -52,6 +52,8 @@ class Screen(object):
 		self.save()
 
 	def save(self):
+		""" Saves the current state of the Screen class to od.json. """
+
 		data = {
 			'ligands': self.ligands,
 			'minimised': self.minimised,
@@ -61,6 +63,8 @@ class Screen(object):
 		json.dump(data, open(self.ligand_dir + '/od.json', 'wb'))
 
 	def load(self):
+		""" Loads data from a saved od.json into the current instance. """
+
 		if os.path.isfile(self.ligand_dir + '/od.json'):
 			try:
 				data = json.load(open(self.ligand_dir + '/od.json'))
@@ -72,6 +76,8 @@ class Screen(object):
 				pass
 
 	def parser(self):
+		""" Presents an argparse interface to the user. """
+
 		import argparse
 		parser = argparse.ArgumentParser(description='Open Discovery Screening Protocol')
 		parser.add_argument('-d', '--directory',help='Path to the ligand directory. Required!', required=True)
@@ -80,6 +86,11 @@ class Screen(object):
 		return vars(parser.parse_args())
 
 	def __checkStart(self):
+		""" Checks if all is well before continuing the screening.
+
+			Looks for a ligands folder. Also determines current state of the ligands.
+		"""
+
 		if os.path.isdir(self.ligand_dir+"/ligands") != True:
 			log("There is no ligand directory", colour="red")
 			sys.exit()
@@ -96,6 +107,8 @@ class Screen(object):
 		self.total = self.numberOfLigands()
 
 	def __header(self):
+		""" Simply presents a pretty header to the user. """
+
 		log('')
 		log('+------------------------------------+')
 		log('|           OPEN DISCOVERY           |')
@@ -105,10 +118,9 @@ class Screen(object):
 		log('| URL:     www.opendiscovery.co.uk   |')
 		log('+------------------------------------+')
 
-	def numberOfLigands(self):
-		return len(self.ligands)
-
 	def convertFiles(self):
+		""" Converts the ligands into a PDB file using obabel, if currently not a PDB. """
+
 		self.__header()
 		logHeader('Converting Files')
 		for index, cmpnd in enumerate(self.ligands):
@@ -124,6 +136,8 @@ class Screen(object):
 		self.save()
 
 	def minimise(self):
+		""" Minimises the ligand PDBs using obabel. """
+
 		logHeader('Minimising Ligands')
 		for index, cmpnd in enumerate(self.ligands):
 			ProgressBar(index+1, self.total)
@@ -138,6 +152,8 @@ class Screen(object):
 		self.save()
 
 	def preparePDBQT(self):
+		""" Converts the minimised ligands to PDBQT for Vina use. """
+
 		logHeader('Preparing PDBQTs')
 		for index, cmpnd in enumerate(self.ligands):
 			ProgressBar(index+1, self.total)
@@ -153,6 +169,8 @@ class Screen(object):
 		self.save()
 
 	def performScreening(self):
+		""" Use the docking driver to perform the actually docking. """
+
 		logHeader('Perform Screening')
 		for index, cmpnd in enumerate(self.pdbqt):
 			ProgressBar(index+1, self.total)
@@ -170,6 +188,8 @@ class Screen(object):
 
 
 	def extractModels(self):
+		""" Extracts separate models from a multi-model PDB/PDBQT file. Uses an awk script. """
+
 		logHeader('Extracting Models')
 		for index, cmpnd in enumerate(self.results):
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
@@ -196,6 +216,8 @@ class Screen(object):
 			ProgressBar(index+1, self.total)
 
 	def gatherResults(self):
+		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """
+
 		logHeader('Gathering Results')
 
 		results_folder = self.ligand_dir + "/results"
@@ -222,7 +244,15 @@ class Screen(object):
 
 		self.sorted_results = sortedlist
 
+	def numberOfLigands(self):
+		""" Utility function to return the number of ligands to convert. """
+
+		return len(self.ligands)
+
+
 class ScreenTests(object):
+	""" A class intended for testing. """
+
 	def __init__(self, args):
 		self.passed = args
 

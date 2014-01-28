@@ -1,10 +1,10 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import argparse
+from time import time
 import OpenDiscovery as od
 import OpenDiscovery.screen as ODScreen
-import argparse
-from time import gmtime, strftime, time
 
 if __name__ == '__main__':
 
@@ -26,7 +26,6 @@ if __name__ == '__main__':
 	# let's time it
 	t = time()
 
-
 	# set up a new screen instance
 	s = ODScreen.Screen(
 			parse 			= False,
@@ -34,7 +33,7 @@ if __name__ == '__main__':
 			receptor 		= options['receptor'],
 			exhaustiveness 	= options['exhaustiveness'],
 			driver 			= options['driver']
-		)
+	)
 
 	od.logHeader('Time Taken: {0:.2f} seconds'.format(time() - t))
 	print '\n'

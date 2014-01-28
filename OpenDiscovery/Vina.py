@@ -13,9 +13,9 @@ def makeFolder(path):
 
 
 class Vina(object):
-	"""Vina driver"""
-	def __init__(self, screen, cmpnd):
+	"""Vina driver. Sets up locations of files. """
 
+	def __init__(self, screen, cmpnd):
 		self.locations = {}
 		self.screen = screen
 
@@ -33,6 +33,8 @@ class Vina(object):
 		makeFolder(screen.ligand_dir + "/results")
 
 	def run(self):
+		""" Actually calls the vina binary. """
+
 		subprocess.call('{vina} --receptor {receptor} --ligand {ligand} --config {conf} --out {results} --log {log} --exhaustiveness {exhaustiveness}'.format(
 			vina=self.locations['vina'], receptor=self.locations['receptor'], ligand=self.locations['ligand'],
 			conf=self.locations['config'], results=self.locations['results'], log=self.locations['log'],

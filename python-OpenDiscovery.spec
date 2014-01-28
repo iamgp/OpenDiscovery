@@ -17,7 +17,7 @@
 %define _binaries_in_noarch_packages_terminate_build   0
 
 Name:           python-OpenDiscovery
-Version:        2.0.2
+Version:        2.0.6
 Release:        0
 License:        GPL
 Summary:        Computational Drug Discovery Software

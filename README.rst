@@ -1,3 +1,7 @@
+.. image:: http://www2.warwick.ac.uk/fac/sci/moac/people/students/2012/gareth_price/logo.png
+	:width 300px
+	:align center
+
 `www.opendiscovery.org.uk <http://www.opendiscovery.org.uk>`__
 `www.opendiscovery.co.uk <http://www.opendiscovery.co.uk>`__
 

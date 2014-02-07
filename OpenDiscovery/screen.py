@@ -11,6 +11,7 @@ import operator
 from Vina import *
 #from pyPDB import pyPDB
 
+__version__ = '2.0.6'
 class Screen(object):
 	"""	A Screening object that can be used to perform docking of ligands to a receptor.
 
@@ -114,7 +115,7 @@ class Screen(object):
 		log('|           OPEN DISCOVERY           |')
 		log('|          Screening Module          |')
 		log('+------------------------------------+')
-		log('| Version: {0}                    |'.format(__VERSION__))
+		log('| Version: {0}                    |'.format(__version__))
 		log('| URL:     www.opendiscovery.co.uk   |')
 		log('+------------------------------------+')
 
@@ -214,6 +215,8 @@ class Screen(object):
 				pass
 
 			ProgressBar(index+1, self.total)
+
+			os.chdir(self.protocol_dir)
 
 	def gatherResults(self):
 		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """

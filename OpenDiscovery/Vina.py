@@ -3,7 +3,7 @@ import sys, os, errno, subprocess
 def makeFolder(path):
     """Attempts folder creation
 
-        Tries to create a folder. Raises an exception if one exists already/
+        Tries to create a folder. Raises an exception if one exists already.
     """
     try:
         os.makedirs(path)

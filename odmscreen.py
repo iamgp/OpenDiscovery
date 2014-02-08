@@ -28,16 +28,16 @@ if __name__ == '__main__':
 		r = os.path.basename(os.path.normpath(receptor))
 		rName, rExtension = os.path.splitext(r)
 
-		s = ODScreen.Screen(
-		 		parse 			= False,
-		 		directory 		= options['directory'],
-		 		receptor 		= rName,
-		 		exhaustiveness 	= options['exhaustiveness'],
-		 		driver 			= options['driver']
-		)
+		#s = ODScreen.Screen(
+		# 		parse 			= False,
+		# 		directory 		= options['directory'],
+		# 		receptor 		= rName,
+		# 		exhaustiveness 	= options['exhaustiveness'],
+		# 		driver 			= options['driver']
+		#)
 
-		shutil.move(directory+"/results", directory+"/results-"+rName)
-		shutil.move(directory+"/od.json", directory+"/od-"+rName+".json")
+		#shutil.move(directory+"/results", directory+"/results-"+rName)
+		#shutil.move(directory+"/od.json", directory+"/od-"+rName+".json")
 
 	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))
 

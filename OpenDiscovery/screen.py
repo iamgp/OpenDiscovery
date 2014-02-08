@@ -11,7 +11,7 @@ import operator
 from Vina import *
 #from pyPDB import pyPDB
 
-__version__ = '2.0.6'
+__version__ = '2.0.7'
 class Screen(object):
 	"""	A Screening object that can be used to perform docking of ligands to a receptor.
 
@@ -20,6 +20,13 @@ class Screen(object):
 
 	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '', driver = ''):
 		self.options = {}
+		self.ligands = {}
+		self.minimised = []
+		self.pdbqt = []
+		self.results = {}
+		self.total = 0
+		self.sorted_results = []
+
 		if parse:
 			self.options = self.parser()
 		else:
@@ -30,18 +37,17 @@ class Screen(object):
 
 		self.protocol_dir = os.path.abspath(os.path.split(sys.argv[0])[0])
 		self.ligand_dir = os.path.abspath(os.path.expanduser(self.options['directory']))
-		self.ligands = {}
-		self.minimised = []
-		self.pdbqt = []
-		self.results = {}
-		self.total = 0
-		self.sorted_results = []
+
+		# just checking that all necessary files are present
+		self.__checkStart()
 
 		# let's see if there's an od.json file
 		self.load()
 
+
+	def run(self):
+
 		# Actions
-		self.__checkStart()
 		self.convertFiles()
 		self.minimise()
 		self.preparePDBQT()
@@ -51,6 +57,7 @@ class Screen(object):
 
 		# Save files
 		self.save()
+
 
 	def save(self):
 		""" Saves the current state of the Screen class to od.json. """
@@ -115,7 +122,7 @@ class Screen(object):
 		log('|           OPEN DISCOVERY           |')
 		log('|          Screening Module          |')
 		log('+------------------------------------+')
-		log('| Version: {0}                    |'.format(__version__))
+		log('| Version: {0}                     |'.format(__version__))
 		log('| URL:     www.opendiscovery.co.uk   |')
 		log('+------------------------------------+')
 

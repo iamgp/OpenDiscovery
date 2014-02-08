@@ -48,5 +48,5 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry'
     ],
-    scripts=['odscreen.py']
+    scripts=['odscreen.py', 'odmscreen.py']
 )

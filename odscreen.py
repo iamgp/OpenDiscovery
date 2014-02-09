@@ -35,4 +35,6 @@ if __name__ == '__main__':
 			driver 			= options['driver']
 	)
 
+	s.run()
+
 	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))

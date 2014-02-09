@@ -16,28 +16,25 @@ if __name__ == '__main__':
 	options['directory']      = '~/Desktop/od2/'
 	options['exhaustiveness'] = 1
 	options['driver'] 		  = 'vina'
-	options['receptors']	  = []
 
 	directory = os.path.abspath(os.path.expanduser(options['directory']))
 	receptor_folder = directory + "/receptor/*.pdbqt"
 
 	for receptor in glob.glob(receptor_folder):
-		options['receptors'].append(receptor)
+		receptor_name, receptor_extension = os.path.splitext(os.path.basename(os.path.normpath(receptor)))
 
-	for receptor in options['receptors']:
-		r = os.path.basename(os.path.normpath(receptor))
-		rName, rExtension = os.path.splitext(r)
+		s = ODScreen.Screen(
+			parse 			= False,
+			directory 		= options['directory'],
+			exhaustiveness 	= options['exhaustiveness'],
+			receptor 		= receptor_name,
+			driver 			= options['driver']
+		)
 
-		#s = ODScreen.Screen(
-		# 		parse 			= False,
-		# 		directory 		= options['directory'],
-		# 		receptor 		= rName,
-		# 		exhaustiveness 	= options['exhaustiveness'],
-		# 		driver 			= options['driver']
-		#)
+		s.run()
 
-		#shutil.move(directory+"/results", directory+"/results-"+rName)
-		#shutil.move(directory+"/od.json", directory+"/od-"+rName+".json")
+		shutil.move(directory+"/results", directory+"/results-"+receptor_name)
+		shutil.move(directory+"/od.json", directory+"/od-"+receptor_name+".json")
 
 	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))
 

@@ -1,0 +1,6 @@
+site_name: OpenDiscovery
+pages:
+- [index.md, Home]
+- [about.md, About]
+repo_url: https://github.com/iamgp/OpenDiscovery/
+theme: mkdocs

@@ -33,8 +33,13 @@ if __name__ == '__main__':
 
 		s.run()
 
+		print "\n\n\n\n",s.results
+
+		#shutil.rmtree(directory+"/results", True)
+		#shutil.rmtree(directory+"/od.json", True)
 		shutil.move(directory+"/results", directory+"/results-"+receptor_name)
 		shutil.move(directory+"/od.json", directory+"/od-"+receptor_name+".json")
+
 
 	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))
 

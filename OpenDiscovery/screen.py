@@ -59,6 +59,7 @@ class Screen(object):
 		self.save()
 
 
+
 	def save(self):
 		""" Saves the current state of the Screen class to od.json. """
 
@@ -268,3 +269,8 @@ class ScreenTests(object):
 
 	def checkSetup(self):
 		return self.passed
+
+
+def mergeResults(results_array):
+	for result in results_array:
+		print result

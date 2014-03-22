@@ -32,7 +32,7 @@ setup(
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
     package_data={'OpenDiscovery': ['lib/vina-osx/*', 'lib/vina-linux/*', 'lib/*.aw']},
     include_package_data=True,
-    install_requires=[],
+    install_requires=['matplotlib>=1.4', 'pandas>0.13'],
     license="GPL",
     keywords='OpenDiscovery',
     classifiers=[

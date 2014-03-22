@@ -311,6 +311,36 @@ class Screen(object):
 		    f_csv.writerows(ligands)
 
 
+	def plot(self):
+		import numpy as np
+		import matplotlib.pyplot as plt
+		import pandas as pd
+
+		receptors = []
+		for r in self.results:
+			receptors.append(r)
+
+		data = pd.read_csv(self.ligand_dir + '/od_complete.csv', index_col=0).sort_index()
+		fig, ax = plt.subplots()
+		heatmap = ax.pcolor(data, cmap=plt.cm.autumn)
+
+		ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
+		ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
+
+		ax.invert_yaxis()
+		ax.xaxis.tick_top()
+
+		# Set the labels
+		ax.set_xticklabels(receptors, minor=False)
+		ax.set_yticklabels(data.index, minor=False)
+
+		#plt.xticks(rotation=45)
+		plt.colorbar(heatmap)
+
+		plt.savefig(self.ligand_dir+"/heatmap.pdf")
+
+		print '\n'
+
 	def numberOfLigands(self):
 		""" Utility function to return the number of ligands to convert. """
 

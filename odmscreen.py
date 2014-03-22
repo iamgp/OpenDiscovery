@@ -15,7 +15,6 @@ if __name__ == '__main__':
 	options                   = {}
 	options['directory']      = '~/Desktop/od2/'
 	options['exhaustiveness'] = 1
-	options['driver'] 		  = 'vina'
 
 	directory = os.path.abspath(os.path.expanduser(options['directory']))
 	receptor_folder = directory + "/receptor/*.pdbqt"
@@ -28,18 +27,11 @@ if __name__ == '__main__':
 			directory 		= options['directory'],
 			exhaustiveness 	= options['exhaustiveness'],
 			receptor 		= receptor_name,
-			driver 			= options['driver']
+			verbose 		= False
 		)
 
 		s.run()
-
-		print "\n\n\n\n",s.results
-
-		#shutil.rmtree(directory+"/results", True)
-		#shutil.rmtree(directory+"/od.json", True)
-		shutil.move(directory+"/results", directory+"/results-"+receptor_name)
-		shutil.move(directory+"/od.json", directory+"/od-"+receptor_name+".json")
-
+		s.writeCompleteSummary()
 
 	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))
 

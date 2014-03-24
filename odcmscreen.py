@@ -26,14 +26,16 @@ if __name__ == '__main__':
 			parse 			= False,
 			directory 		= options['directory'],
 			exhaustiveness 	= options['exhaustiveness'],
+			verbose 		= True,
 			receptor 		= receptor_name,
-			verbose 		= False
+			multiple_confs	= True
 		)
-
+		# s.load()
+		# s.gatherResults()
+		# s.save()
 		s.run()
-
-	s.writeCompleteSummary()
-	s.plot()
+	#s.writeCompleteSummary()
+	#s.plot()
 
 	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))
 

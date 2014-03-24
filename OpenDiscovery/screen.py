@@ -221,50 +221,49 @@ class Screen(object):
 			else:
 				sys.exit()
 
-			if self.options['multiple_confs'] == True:
-
-			else:
-				self.results[self.options['receptor']][cmpnd] = 0
-
 
 	def extractModels(self):
 		""" Extracts separate models from a multi-model PDB/PDBQT file. Uses an awk script. """
 
 		logHeader('Extracting Models')
-		for index, cmpnd in enumerate(self.results[self.options['receptor']]):
-			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
-			results_folder = []
 
-			if self.options['multiple_confs'] == True:
-				for conf_file in glob.glob(self.ligand_dir + "/confs/"+self.options['receptor']+"*"):
-					short = os.path.splitext(os.path.basename(conf_file))[0]
-					results = self.ligand_dir + "/results-" + self.options['receptor'] + "/" + short
-					results_folder.append(results)
-			else:
-				results_folder.append(self.ligand_dir + "/results-" + self.options['receptor'])
+		# if we have multiple confs, make array of all of them
+		# self.confs = []
+		if self.options['multiple_confs'] == True:
+			self.confs = []
+			for conf in glob.glob(self.ligand_dir + "/confs/" + self.options['receptor'] + "*"):
+				self.confs.append(self._getFileNameFromPath(conf))
 
-			print cmpnd
+			# so we have confs, receptor, ligands arrays
+			# we need to loop over results-X/conf/*/ to get all ligand folders
+			lf = []
+			for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*/*.pdbqt"):
+				lf.append(screened)
+		else:
+			lf = [self.ligand_dir + "/results-" + self.options['receptor'] + "/*.pdbqt"]
 
-			for rf in results_folder:
-				os.chdir(rf)
+		# for each ligand, we need to run the awk script to extract the energy
+		for index, l in enumerate(lf):
+			os.chdir(os.path.abspath(os.path.join(l, os.pardir)))
+			lig_name = self._getFileNameFromPath(l)
 
-				self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(
-					pd=self.protocol_dir, results=cmpnd + ".pdbqt"))
+			# extract modes
+		 	self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(pd=self.protocol_dir, results=lig_name + ".pdbqt"))
 
-				makeFolder(cmpnd)
+		 	# make new folder for them
+		 	makeFolder(lig_name)
 
-				for mode in glob.glob('mode_*.pdb'):
-					os.rename(mode, '{0}/{0}_{1}'.format(cmpnd, mode))
+		 	for mode in glob.glob('mode_*.pdb'):
+		 		os.rename(mode, '{0}/{0}_{1}'.format(lig_name, mode))
 
-				try:
-					os.rename(cmpnd+".txt", cmpnd+"/"+cmpnd+".txt")
-					os.rename(cmpnd+".pdbqt", cmpnd+"/"+cmpnd+".pdbqt")
-				except:
-					pass
+		 	try:
+		 		os.rename(lig_name+".txt", lig_name+"/"+lig_name+".txt")
+		 		os.rename(lig_name+".pdbqt", lig_name+"/"+lig_name+".pdbqt")
+		 	except:
+		 		pass
 
-				ProgressBar(index+1, self.total)
+			os.chdir(self.protocol_dir)
 
-				os.chdir(self.protocol_dir)
 
 	def gatherResults(self):
 		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """
@@ -367,6 +366,9 @@ class Screen(object):
 		""" Utility function to return the number of ligands to convert. """
 
 		return len(self.ligands)
+
+	def _getFileNameFromPath(self, path):
+		return os.path.splitext(os.path.basename(path))[0]
 
 
 class ScreenTests(object):

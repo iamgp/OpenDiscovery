@@ -45,8 +45,8 @@ class Vina(object):
 
 				short = os.path.splitext(os.path.basename(conf_file))[0]
 				#this isn't totally correct
-				if short not in self.screen.results[self.screen.options['receptor']]:
-
+				#if short not in self.screen.results[self.screen.options['receptor']]:
+				if 1 == 2:
 					self.locations['config'] = conf_file
 					short = os.path.splitext(os.path.basename(conf_file))[0]
 
@@ -61,6 +61,8 @@ class Vina(object):
 					makeFolder(_receptor_folder)
 					makeFolder(_conf_folder)
 
+					self.screen.results[self.screen.options['receptor']][short] = 0
+
 					self.cmd.run('{vina} --receptor {receptor} --ligand {ligand} --config {conf} --out {results} --log {log} --exhaustiveness {exhaustiveness}'.format(
 						vina=self.locations['vina'], receptor=self.locations['receptor'], ligand=self.locations['ligand'],
 						conf=self.locations['config'], results=self.locations['results'], log=self.locations['log'],
@@ -71,3 +73,4 @@ class Vina(object):
 				vina=self.locations['vina'], receptor=self.locations['receptor'], ligand=self.locations['ligand'],
 				conf=self.locations['config'], results=self.locations['results'], log=self.locations['log'],
 				exhaustiveness=self.screen.options['exhaustiveness']))
+			self.results[self.options['receptor']][cmpnd] = 0

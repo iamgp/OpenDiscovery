@@ -33,7 +33,7 @@ if __name__ == '__main__':
 		s.run()
 
 	s.writeCompleteSummary()
-	s.plot()
+	#s.plot()
 
 	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))
 

@@ -229,6 +229,7 @@ class Screen(object):
 
 		# if we have multiple confs, make array of all of them
 		# self.confs = []
+		lf = []
 		if self.options['multiple_confs'] == True:
 			self.confs = []
 			for conf in glob.glob(self.ligand_dir + "/confs/" + self.options['receptor'] + "*"):
@@ -236,11 +237,11 @@ class Screen(object):
 
 			# so we have confs, receptor, ligands arrays
 			# we need to loop over results-X/conf/*/ to get all ligand folders
-			lf = []
 			for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*/*.pdbqt"):
 				lf.append(screened)
 		else:
-			lf = [self.ligand_dir + "/results-" + self.options['receptor'] + "/*.pdbqt"]
+			for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*.pdbqt"):
+				lf.append(screened)
 
 		# for each ligand, we need to run the awk script to extract the energy
 		for index, l in enumerate(lf):

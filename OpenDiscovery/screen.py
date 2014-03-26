@@ -313,24 +313,29 @@ class Screen(object):
 			receptors.append(r)
 			results.append(self.results[r])
 
-		for l in self.ligands:
-			x = l
-			asdf = (l,)
-			for rec in receptors:
-				y = self.results[rec][l]
-				x = x + ", " + y
-				asdf = asdf + (y,)
+		if self.options['multiple_confs'] == True:
+			# results are in 'results' => receptor => conf => ligand
+			# let's make a summary file per receptor
+			print 'cannot merge results for >2 dimensions'
+		else:
+			for l in self.ligands:
+				x = l
+				asdf = (l,)
+				for rec in receptors:
+					y = self.results[rec][l]
+					x = x + ", " + y
+					asdf = asdf + (y,)
 
-			ligands.append(asdf)
+				ligands.append(asdf)
 
-		for i in ligands:
-			res.append(i)
+			for i in ligands:
+				res.append(i)
 
 
-		with open(self.ligand_dir + '/od_complete.csv','w') as f:
-		    f_csv = csv.writer(f)
-		    f_csv.writerow(["Ligands"] + receptors)
-		    f_csv.writerows(ligands)
+			with open(self.ligand_dir + '/od_complete.csv','w') as f:
+			    f_csv = csv.writer(f)
+			    f_csv.writerow(["Ligands"] + receptors)
+			    f_csv.writerows(ligands)
 
 
 	def plot(self):

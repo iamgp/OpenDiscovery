@@ -42,16 +42,16 @@ class Vina(object):
 		""" Actually calls the vina binary. """
 		if self.multiple_confs:
 			for conf_file in glob.glob(self.screen.ligand_dir + "/confs/" + self.screen.options['receptor'] + "*"):
-
-				short = os.path.splitext(os.path.basename(conf_file))[0]
-				#this isn't totally correct
-				#if short not in self.screen.results[self.screen.options['receptor']]:
-				if 1 == 2:
+				conf_name = os.path.splitext(os.path.basename(conf_file))[0]
+				try:
+					if self.cmpnd in self.screen.results[self.screen.options['receptor']][conf_name]:
+						pass
+				except:
 					self.locations['config'] = conf_file
-					short = os.path.splitext(os.path.basename(conf_file))[0]
+					conf_name = os.path.splitext(os.path.basename(conf_file))[0]
 
 					_receptor_folder = self.screen.ligand_dir + "/results-" +self.screen.options['receptor'] + "/"
-					_conf_folder = _receptor_folder + "/" + short + "/"
+					_conf_folder = _receptor_folder + "/" + conf_name + "/"
 					_results_location = _conf_folder + self.cmpnd + ".pdbqt"
 					_log_location =  _conf_folder + self.cmpnd + ".txt"
 
@@ -61,7 +61,7 @@ class Vina(object):
 					makeFolder(_receptor_folder)
 					makeFolder(_conf_folder)
 
-					self.screen.results[self.screen.options['receptor']][short] = 0
+					self.screen.results[self.screen.options['receptor']][conf_name] = 0
 
 					self.cmd.run('{vina} --receptor {receptor} --ligand {ligand} --config {conf} --out {results} --log {log} --exhaustiveness {exhaustiveness}'.format(
 						vina=self.locations['vina'], receptor=self.locations['receptor'], ligand=self.locations['ligand'],
@@ -69,7 +69,7 @@ class Vina(object):
 						exhaustiveness=self.screen.options['exhaustiveness']))
 
 		else:
-			if 1 ==1:
+			if self.cmpnd not in self.screen.results[self.screen.options['receptor']]:
 				self.cmd.run('{vina} --receptor {receptor} --ligand {ligand} --config {conf} --out {results} --log {log} --exhaustiveness {exhaustiveness}'.format(
 					vina=self.locations['vina'], receptor=self.locations['receptor'], ligand=self.locations['ligand'],
 					conf=self.locations['config'], results=self.locations['results'], log=self.locations['log'],

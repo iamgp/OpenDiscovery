@@ -313,6 +313,7 @@ class Screen(object):
 			receptors.append(r)
 			results.append(self.results[r])
 
+
 		if self.options['multiple_confs'] == True:
 			# results are in 'results' => receptor => conf => ligand
 			# let's make a summary file per receptor

@@ -1,0 +1,41 @@
+@font-face {
+	font-family: 'KievitWeb';
+	font-weight: normal;
+	src: url(../fonts/KievitWeb.eot); /* IE9 Compat Modes */
+	src: url(../fonts/KievitWeb.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
+	     url(../fonts/KievitWeb.woff) format('woff'), /* Modern Browsers */
+	     url('KievitWeb.ttf')  format('truetype'), /* Safari, Android, iOS */
+	     url('KievitWeb.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+	font-family: 'KievitWeb';
+	font-weight: bold;
+	src: url(../fonts/KievitWeb-Bold.eot); /* IE9 Compat Modes */
+	src: url(../fonts/KievitWeb-Bold.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
+	     url(../fonts/KievitWeb-Bold.woff) format('woff'), /* Modern Browsers */
+	     url('KievitWeb-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+	     url('KievitWeb-Bold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+	font-family: 'KievitWeb';
+	font-weight: normal;
+	font-style: italic;
+	src: url(../fonts/KievitWeb-Ita.eot); /* IE9 Compat Modes */
+	src: url(../fonts/KievitWeb-Ita.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
+	     url(../fonts/KievitWeb-Ita.woff) format('woff'), /* Modern Browsers */
+	     url('KievitWeb-Ita.ttf')  format('truetype'), /* Safari, Android, iOS */
+	     url('KievitWeb-Ita.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+	font-family: 'KievitWeb';
+	font-weight: bold;
+	font-style: italic;
+	src: url(../fonts/KievitWeb-BoldIta.eot); /* IE9 Compat Modes */
+	src: url(../fonts/KievitWeb-BoldIta.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
+	     url(../fonts/KievitWeb-BoldIta.woff) format('woff'), /* Modern Browsers */
+	     url('KievitWeb-BoldIta.ttf')  format('truetype'), /* Safari, Android, iOS */
+	     url('KievitWeb-BoldIta.svg#svgFontName') format('svg'); /* Legacy iOS */
+}

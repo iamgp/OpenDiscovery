@@ -1,7 +1,7 @@
 `www.opendiscovery.org.uk <http://www.opendiscovery.org.uk>`__
 `www.opendiscovery.co.uk <http://www.opendiscovery.co.uk>`__
 
-Version: 2.1.0
+Version: 2.1.1
 
 Contacts: gareth.price@warwick.ac.uk; a.marsh@warwick.ac.uk
 

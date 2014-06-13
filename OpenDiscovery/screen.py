@@ -19,7 +19,7 @@ class Screen(object):
 		Instantiates variables variables and runs methods that perform the screening.
 	"""
 
-	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '5', driver = 'vina', verbose = False):
+	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '5', driver = 'vina', verbose = False, multiple_confs = False):
 
 		# initialising ivars
 		self.options = {}
@@ -37,6 +37,7 @@ class Screen(object):
 			self.options['receptor'] = receptor
 			self.options['exhaustiveness'] = exhaustiveness
 			self.options['driver'] = driver
+			self.options['multiple_confs'] = multiple_confs
 
 		self.protocol_dir = os.path.abspath(os.path.split(sys.argv[0])[0])
 		self.ligand_dir = os.path.abspath(os.path.expanduser(self.options['directory']))
@@ -99,7 +100,7 @@ class Screen(object):
 			'minimised': self.minimised,
 			'results': self.results
 		}
-		json.dump(data, open(self.ligand_dir + '/od.json', 'wb'))
+		json.dump(data, open(self.ligand_dir + '/od.json', 'wb'), indent=4)
 
 	def parser(self):
 		""" Presents an argparse interface to the user. """
@@ -178,7 +179,7 @@ class Screen(object):
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
 
 			# logic not right
-			if not(cmpnd in self.minimised and self.ligands[cmpnd] == '.pdbqt'):
+			if not(cmpnd in self.minimised) and not(self.ligands[cmpnd] == '.pdbqt'):
 				self.cmd.run('obminimize -sd -c 1e-5 {ld}/ligands/{name}.pdb'.format(ld=self.ligand_dir, name=cmpnd))
 				self.minimised.append(cmpnd)
 
@@ -213,74 +214,95 @@ class Screen(object):
 
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
 
-			if cmpnd not in self.results[self.options['receptor']]:
-				if self.options['driver'].lower() == 'vina':
-					docking = Vina(self, cmpnd, self.cmd.verbose)
-				else:
-					sys.exit()
-
-				docking.run()
-				self.results[self.options['receptor']][cmpnd] = 0
+			#if cmpnd not in self.results[self.options['receptor']]:
+			if self.options['driver'].lower() == 'vina':
+				Vina(self, cmpnd, self.cmd.verbose, self.options['multiple_confs']).run()
+				#pass
+			else:
+				sys.exit()
 
 
 	def extractModels(self):
 		""" Extracts separate models from a multi-model PDB/PDBQT file. Uses an awk script. """
 
 		logHeader('Extracting Models')
-		for index, cmpnd in enumerate(self.results[self.options['receptor']]):
-			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
 
-			results_folder = self.ligand_dir + "/results-" + self.options['receptor']
-			results_location = results_folder + "/" + cmpnd + ".pdbqt"
+		# if we have multiple confs, make array of all of them
+		# self.confs = []
+		lf = []
+		if self.options['multiple_confs'] == True:
+			self.confs = []
+			for conf in glob.glob(self.ligand_dir + "/confs/" + self.options['receptor'] + "*"):
+				self.confs.append(self._getFileNameFromPath(conf))
 
-			os.chdir(results_folder)
+			# so we have confs, receptor, ligands arrays
+			# we need to loop over results-X/conf/*/ to get all ligand folders
+			for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*/*.pdbqt"):
+				lf.append(screened)
+		else:
+			for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*.pdbqt"):
+				lf.append(screened)
 
-			self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(
-				pd=self.protocol_dir, results=results_location))
+		# for each ligand, we need to run the awk script to extract the energy
+		for index, l in enumerate(lf):
+			os.chdir(os.path.abspath(os.path.join(l, os.pardir)))
+			lig_name = self._getFileNameFromPath(l)
 
-			makeFolder(cmpnd)
+			# extract modes
+		 	self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(pd=self.protocol_dir, results=lig_name + ".pdbqt"))
 
-			for mode in glob.glob('mode_*.pdb'):
-				os.rename(mode, '{0}/{0}_{1}'.format(cmpnd, mode))
+		 	# make new folder for them
+		 	makeFolder(lig_name)
 
-			try:
-				os.rename(cmpnd+".txt", cmpnd+"/"+cmpnd+".txt")
-				os.rename(cmpnd+".pdbqt", cmpnd+"/"+cmpnd+".pdbqt")
-			except:
-				pass
+		 	for mode in glob.glob('mode_*.pdb'):
+		 		os.rename(mode, '{0}/{0}_{1}'.format(lig_name, mode))
 
-			ProgressBar(index+1, self.total)
+		 	try:
+		 		os.rename(lig_name+".txt", lig_name+"/"+lig_name+".txt")
+		 		os.rename(lig_name+".pdbqt", lig_name+"/"+lig_name+".pdbqt")
+		 	except:
+		 		pass
 
 			os.chdir(self.protocol_dir)
+
 
 	def gatherResults(self):
 		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """
 
 		logHeader('Gathering Results')
+		self.results[self.options['receptor']] = {}
 
-		results_folder = self.ligand_dir + "/results-" + self.options['receptor']
-		open(results_folder+'/summary.csv', 'w').close()
-		for index, result in enumerate(glob.glob(results_folder+'/*/')):
-		    b = os.path.basename(os.path.normpath(result))
-		    with open('{0}/{1}.txt'.format(result, b)) as file:
-		        for line in file:
-		            if line.find('0.000') != -1:
-		                energy = line.split()[1]
+		results_folder = []
+		if self.options['multiple_confs'] == True:
+			for conf_file in glob.glob(self.ligand_dir + "/confs/"+self.options['receptor']+"*"):
+				short = os.path.splitext(os.path.basename(conf_file))[0]
+				results = self.ligand_dir + "/results-" + self.options['receptor'] + "/" + short
+				results_folder.append(results)
+				self.results[self.options['receptor']][short] = {}
 
-		                with open(results_folder+'/summary.csv', 'a') as summary:
-		                    summary.write('{0},{1}\n'.format(b, float(energy)))
+		else:
+			results_folder.append(self.ligand_dir + "/results-" + self.options['receptor'])
 
-		    #reader = csv.reader(open(results_folder+'/summary.csv'))
-		    #sortedlist = sorted(reader, key=operator.itemgetter(1), reverse=True)
-		    self.results[self.options['receptor']][b] = energy
+	  	for rf in results_folder:
+	  		short = os.path.splitext(os.path.basename(rf))[0]
+			open(rf+'/summary.csv', 'w').close()
+			for index, result in enumerate(glob.glob(rf+'/*/')):
+			    lig_name = os.path.basename(os.path.normpath(result))
+			    conf_file = os.path.basename(os.path.abspath(os.path.join(result, os.pardir)))
+			    with open('{0}/{1}.txt'.format(result, lig_name)) as file:
+			        for line in file:
+			            if line.find('0.000') != -1:
+			                energy = line.split()[1]
+			                with open(rf+'/summary.csv', 'a') as summary:
+			                    summary.write('{0},{1}\n'.format(lig_name, float(energy)))
+				ProgressBar(index+1, self.total)
 
-		    ProgressBar(index+1, self.total)
+				if self.options['multiple_confs'] == True:
+				 	self.results[self.options['receptor']][conf_file][lig_name] = energy
+				else:
+				 	self.results[self.options['receptor']][lig_name] = energy
 
-		#with open(results_folder+'/summary.csv', 'w') as file:
-		#	for line in sortedlist:
-		#		file.write(line[0] + ', ' + line[1] + '\n')
 
-		#self.sorted_results = sortedlist
 
 	def writeCompleteSummary(self):
 		receptors = []
@@ -291,24 +313,30 @@ class Screen(object):
 			receptors.append(r)
 			results.append(self.results[r])
 
-		for l in self.ligands:
-			x = l
-			asdf = (l,)
-			for rec in receptors:
-				y = self.results[rec][l]
-				x = x + ", " + y
-				asdf = asdf + (y,)
 
-			ligands.append(asdf)
+		if self.options['multiple_confs'] == True:
+			# results are in 'results' => receptor => conf => ligand
+			# let's make a summary file per receptor
+			print 'cannot merge results for >2 dimensions'
+		else:
+			for l in self.ligands:
+				x = l
+				asdf = (l,)
+				for rec in receptors:
+					y = self.results[rec][l]
+					x = x + ", " + y
+					asdf = asdf + (y,)
 
-		for i in ligands:
-			res.append(i)
+				ligands.append(asdf)
+
+			for i in ligands:
+				res.append(i)
 
 
-		with open(self.ligand_dir + '/od_complete.csv','w') as f:
-		    f_csv = csv.writer(f)
-		    f_csv.writerow(["Ligands"] + receptors)
-		    f_csv.writerows(ligands)
+			with open(self.ligand_dir + '/od_complete.csv','w') as f:
+			    f_csv = csv.writer(f)
+			    f_csv.writerow(["Ligands"] + receptors)
+			    f_csv.writerows(ligands)
 
 
 	def plot(self):
@@ -345,6 +373,9 @@ class Screen(object):
 		""" Utility function to return the number of ligands to convert. """
 
 		return len(self.ligands)
+
+	def _getFileNameFromPath(self, path):
+		return os.path.splitext(os.path.basename(path))[0]
 
 
 class ScreenTests(object):

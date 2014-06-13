@@ -9,7 +9,6 @@ import shutil
 import csv
 import operator
 from Vina import *
-#from pyPDB import pyPDB
 from runProcess import runProcess
 
 __version__ = '2.1.0'

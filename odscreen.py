@@ -1,40 +1,29 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import argparse
-from time import time
-import OpenDiscovery as od
-import OpenDiscovery.screen as ODScreen
+from OpenDiscovery.screen import run
 
-if __name__ == '__main__':
+# ---------------------------------------------------------------------------- #
+# Set up options 															   #
+# ---------------------------------------------------------------------------- #
+# Options available:														   #
+# 	- parse      		allows entry via the command line (all 				   #
+# 						other options are defunct) 							   #
+# 	- directory			tell OpenDiscovery where the files are 				   #
+# 						this is required! 									   #
+# 	- exhaustiveness	how much effort do you want to use? must be a number   #
+# 	- verbose			If True, all commands will show their output (useful   #
+# 						for debugging)										   #
+# ---------------------------------------------------------------------------- #
 
-	# Set up parser for options via command line
-	#parser = argparse.ArgumentParser(description='Open Discovery Screening Protocol')
-	#parser.add_argument('-d', '--directory', help='Path to the ligand directory. Required!', required=True)
-	#parser.add_argument('-e', '--exhaustiveness', help='Exhaustiveness. Default = 20.', type=int, default=20)
-	#parser.add_argument('-r', '--receptor', help='Receptor Name. Must be located within the receptor folder. Default = receptor.', default='receptor')
-	#parser.add_argument('--driver', help='The docking driver to use. Default = vina', default='vina')
-	#options = vars(parser.parse_args())
+options                   = {}
+options['directory']      = '~/Desktop/OD_Experiment/'
+options['exhaustiveness'] = 10
+#options['parse']		  = True 				(for e.g.)
+#options['verbose']		  = True 				(for e.g.)
 
-	# or hard code them in
-	options                   = {}
-	options['directory']      = '~/Desktop/od2/'
-	options['receptor']       = 'receptor'
-	options['exhaustiveness'] = 1
-	options['driver'] 		  = 'vina'
+# ---------------------------------------------------------------------------- #
+# Run the screening								 			   				   #
+# ---------------------------------------------------------------------------- #
 
-	# let's time it
-	t = time()
-
-	# set up a new screen instance
-	s = ODScreen.Screen(
-			parse 			= False,
-			directory 		= options['directory'],
-			receptor 		= options['receptor'],
-			exhaustiveness 	= options['exhaustiveness'],
-			driver 			= options['driver']
-	)
-
-	s.run()
-
-	od.logHeader('Time Taken: {0:.2f} seconds\n'.format(time() - t))
+od = run(options)

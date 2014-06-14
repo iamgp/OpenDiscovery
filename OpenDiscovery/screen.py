@@ -11,7 +11,34 @@ import operator
 from Vina import *
 from runProcess import runProcess
 
-__version__ = '2.1.0'
+__version__ = '2.2'
+
+def run(options = []):
+	directory = os.path.abspath(os.path.expanduser(options['directory']))
+	receptor_folder = directory + "/receptor/*.pdbqt"
+
+	for receptor in glob.glob(receptor_folder):
+		receptor_name, receptor_extension = os.path.splitext(os.path.basename(os.path.normpath(receptor)))
+		s = Screen (
+			parse 			= tryForKeyInDict('parse',         options, False),
+			directory 		= tryForKeyInDict('directory',     options, '~'),
+			exhaustiveness 	= tryForKeyInDict('exhaustivenes', options, 10),
+			verbose 		= tryForKeyInDict('verbose',       options, False),
+			receptor 		= receptor_name,
+			multiple_confs	= tryForKeyInDict('multiple_conf', options, True)
+		)
+		s.run()
+
+	return s
+
+def tryForKeyInDict(needle, haystack, fallback):
+	try:
+		return haystack[needle]
+	except Exception, e:
+		return fallback
+
+
+
 class Screen(object):
 	"""	A Screening object that can be used to perform docking of ligands to a receptor.
 

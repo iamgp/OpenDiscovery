@@ -48,6 +48,5 @@ python setup.py install --prefix=%{_prefix} --root=%{buildroot}
 %defattr(-,root,root,-)
 %{python_sitelib}/*
 /usr/bin/odscreen.py
-/usr/bin/odmscreen.py
 
 %changelog

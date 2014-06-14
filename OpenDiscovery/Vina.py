@@ -29,9 +29,9 @@ class Vina(object):
 		elif 'darwin' in sys.platform:
 			self.locations['vina'] = screen.protocol_dir + "/OpenDiscovery/lib/vina-osx/vina"
 
-		self.locations['receptor'] = screen.ligand_dir + "/receptor/" + screen.options['receptor'] + ".pdbqt"
+		self.locations['receptor'] = screen.ligand_dir + "/receptors/" + screen.options['receptor'] + ".pdbqt"
 		self.locations['ligand'] = screen.ligand_dir + "/ligands/" + cmpnd + ".pdbqt"
-		self.locations['config'] = screen.ligand_dir + "/receptor/" + screen.options['receptor'] + ".txt"
+		self.locations['config'] = screen.ligand_dir + "/receptors/" + screen.options['receptor'] + ".txt"
 		self.locations['results'] = screen.ligand_dir + "/results-"+screen.options['receptor']+"/" + cmpnd + ".pdbqt"
 		self.locations['log'] = screen.ligand_dir + "/results-"+screen.options['receptor']+"/" + cmpnd + ".txt"
 

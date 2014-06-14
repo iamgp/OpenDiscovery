@@ -15,7 +15,7 @@ __version__ = '2.2'
 
 def run(options = []):
 	directory = os.path.abspath(os.path.expanduser(options['directory']))
-	receptor_folder = directory + "/receptor/*.pdbqt"
+	receptor_folder = directory + "/receptors/*.pdbqt"
 
 	for receptor in glob.glob(receptor_folder):
 		receptor_name, receptor_extension = os.path.splitext(os.path.basename(os.path.normpath(receptor)))
@@ -37,8 +37,6 @@ def tryForKeyInDict(needle, haystack, fallback):
 	except Exception, e:
 		return fallback
 
-
-
 class Screen(object):
 	"""	A Screening object that can be used to perform docking of ligands to a receptor.
 
@@ -54,6 +52,8 @@ class Screen(object):
 		self.results = {}
 		self.total = 0
 		self.sorted_results = []
+
+		self.determineTypeOfScreening()
 
 		# determining user variables
 		if parse:
@@ -71,8 +71,6 @@ class Screen(object):
 		# set up the wrapper for run
 		self.cmd = runProcess()
 		self.cmd.verbose = verbose
-
-
 
 	def run(self):
 		# check that all necessary files are present
@@ -100,6 +98,7 @@ class Screen(object):
 		# we can now perform the screening
 		self.performScreening()
 
+		# lets extract the models and gather the results
 		self.extractModels()
 		self.gatherResults()
 
@@ -175,6 +174,13 @@ class Screen(object):
 		log('| Version: {0}                     |'.format(__version__))
 		log('| URL:     www.opendiscovery.co.uk   |')
 		log('+------------------------------------+')
+
+	def determineTypeOfScreening(self):
+		self.count = {}
+		self.count['ligands'], self.count['receptors'] = 0, 0
+		self.count['ligands'] = self.numberOfLigands()
+		self.count['receptors'] = self.numberOfReceptors()
+
 
 	def convertToPDB(self):
 		""" Converts the ligands into a PDB file using obabel, if currently not a PDB. """
@@ -259,7 +265,7 @@ class Screen(object):
 		if self.options['multiple_confs'] == True:
 			self.confs = []
 			for conf in glob.glob(self.ligand_dir + "/confs/" + self.options['receptor'] + "*"):
-				self.confs.append(self._getFileNameFromPath(conf))
+				self.confs.append(self.__getFileNameFromPath(conf))
 
 			# so we have confs, receptor, ligands arrays
 			# we need to loop over results-X/conf/*/ to get all ligand folders
@@ -272,7 +278,7 @@ class Screen(object):
 		# for each ligand, we need to run the awk script to extract the energy
 		for index, l in enumerate(lf):
 			os.chdir(os.path.abspath(os.path.join(l, os.pardir)))
-			lig_name = self._getFileNameFromPath(l)
+			lig_name = self.__getFileNameFromPath(l)
 
 			# extract modes
 		 	self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(pd=self.protocol_dir, results=lig_name + ".pdbqt"))
@@ -398,9 +404,18 @@ class Screen(object):
 	def numberOfLigands(self):
 		""" Utility function to return the number of ligands to convert. """
 
+
 		return len(self.ligands)
 
-	def _getFileNameFromPath(self, path):
+	def numberOfReceptors(self):
+		""" Utility function to return the number of receptors. """
+
+		for receptor in glob.glob('{ld}/receptors/*.pdbqt'.format(self.ligand_dir)):
+				self.count['receptors'] += 1
+
+		return self.count['receptors']
+
+	def __getFileNameFromPath(self, path):
 		return os.path.splitext(os.path.basename(path))[0]
 
 

@@ -17,15 +17,17 @@ def run(options = []):
 	directory = os.path.abspath(os.path.expanduser(options['directory']))
 	receptor_folder = directory + "/receptors/*.pdbqt"
 
+	# ! TODO
+	# should probably put this receptor iteration logic into the Screen class
+	# will leave it for now!
 	for receptor in glob.glob(receptor_folder):
 		receptor_name, receptor_extension = os.path.splitext(os.path.basename(os.path.normpath(receptor)))
 		s = Screen (
 			parse 			= tryForKeyInDict('parse',         options, False),
 			directory 		= tryForKeyInDict('directory',     options, '~'),
-			exhaustiveness 	= tryForKeyInDict('exhaustivenes', options, 10),
+			exhaustiveness 	= tryForKeyInDict('exhaustivenes', options, 20),
 			verbose 		= tryForKeyInDict('verbose',       options, False),
-			receptor 		= receptor_name,
-			multiple_confs	= tryForKeyInDict('multiple_conf', options, True)
+			receptor 		= receptor_name
 		)
 		s.run()
 
@@ -43,7 +45,7 @@ class Screen(object):
 		Instantiates variables variables and runs methods that perform the screening.
 	"""
 
-	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '5', driver = 'vina', verbose = False, multiple_confs = False):
+	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '20', driver = 'vina', verbose = False):
 
 		# initialising ivars
 		self.options = {}
@@ -61,7 +63,7 @@ class Screen(object):
 			self.options['receptor'] = receptor
 			self.options['exhaustiveness'] = exhaustiveness
 			self.options['driver'] = driver
-			self.options['multiple_confs'] = multiple_confs
+			self.options['multiple_confs'] = True
 
 		self.protocol_dir = os.path.abspath(os.path.split(sys.argv[0])[0])
 		self.ligand_dir = os.path.abspath(os.path.expanduser(self.options['directory']))
@@ -70,13 +72,13 @@ class Screen(object):
 		self.cmd = runProcess()
 		self.cmd.verbose = verbose
 
-		self.determineTypeOfScreening()
-
-	def run(self):
 		# check that all necessary files are present
 		self.__checkStart()
 
-		# let's load our state
+		# determine what needs to happen
+		self.determineTypeOfScreening()
+
+		# lets load our state
 		self.load()
 
 		if self.options['receptor'] not in self.results:
@@ -84,9 +86,9 @@ class Screen(object):
 		self.save()
 
 		# scanning the directory to make sure we detect any additions
-		self.__scanDirectory()
-		self.total = len(self.ligands)
+		self.total = self.__scanDirectoryAndUpdateLigandState()
 
+	def run(self):
 		# at this point we know what ligands are present, and what the highest extension
 		# is for all of them. we can now prepare any files for docking that aren't already
 		# a pdbqt
@@ -102,8 +104,10 @@ class Screen(object):
 		self.extractModels()
 		self.gatherResults()
 
-		# Save files
+		# save files
 		self.save()
+
+		# breathe!
 
 	def load(self):
 		""" Loads data from a saved od.json into the current instance. """
@@ -135,12 +139,13 @@ class Screen(object):
 		parser.add_argument('-d', '--directory',help='Path to the ligand directory. Required!', required=True)
 		parser.add_argument('-e', '--exhaustiveness',help='Exhaustiveness. Default = 20.', type=int, default=20)
 		parser.add_argument('-r', '--receptor', help='Receptor Name. Must be located within the receptor folder. Default = receptor.', default='receptor')
+		parser.add_argument('-v', '--verbose', help='Enable verbose output. Default = False.', action='store_true', default=False)
 		return vars(parser.parse_args())
 
 	def __checkStart(self):
 		""" Checks if all is well before continuing the screening.
 
-			Looks for a ligands folder. Also determines current state of the ligands.
+			Looks for a ligands,receptors and confs folder.
 		"""
 
 		if (
@@ -151,7 +156,9 @@ class Screen(object):
 			log("There is an error in folder setup. Exiting now.", colour="red")
 			sys.exit()
 
-	def __scanDirectory(self):
+	def __scanDirectoryAndUpdateLigandState(self):
+		""" Updates ligand state, returning the number of ligands to iterate over"""
+
 		for cmpnd in glob.glob('{ld}/ligands/*'.format(ld=self.ligand_dir)):
 			f = os.path.splitext(os.path.basename(cmpnd))
 			lig_name = f[0]
@@ -166,6 +173,7 @@ class Screen(object):
 			if (lig_ext == '.pdbqt') and self.ligands[lig_name] != '.pdbqt':
 				self.ligands[lig_name] = lig_ext
 
+		return len(self.ligands)
 
 	def __header(self):
 		""" Simply presents a pretty header to the user. """
@@ -178,6 +186,9 @@ class Screen(object):
 		log('| Version: {0}                     |'.format(__version__))
 		log('| URL:     www.opendiscovery.co.uk   |')
 		log('+------------------------------------+')
+
+	def __getFileNameFromPath(self, path):
+		return os.path.splitext(os.path.basename(path))[0]
 
 	def determineTypeOfScreening(self):
 		self.count = {}
@@ -200,11 +211,11 @@ class Screen(object):
 		if r > 1:
 			self.screening_type.append('multi-receptor')
 
+		return self.screening_type
 
 	def convertToPDB(self):
 		""" Converts the ligands into a PDB file using obabel, if currently not a PDB. """
 
-		#self.__header()
 		logHeader(self.options['receptor'])
 		logHeader('Converting to PDBs')
 		for index, cmpnd in enumerate(self.ligands):
@@ -256,21 +267,19 @@ class Screen(object):
 		self.save()
 
 	def performScreening(self):
-		""" Use the docking driver to perform the actually docking. """
+		""" Use the docking driver to perform the actual docking. """
 
 		logHeader('Perform Screening')
+
 		for index, cmpnd in enumerate(self.ligands):
 			ProgressBar(index+1, self.total)
 
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
 
-			#if cmpnd not in self.results[self.options['receptor']]:
 			if self.options['driver'].lower() == 'vina':
 				Vina(self, cmpnd, self.cmd.verbose, self.options['multiple_confs']).run()
-				#pass
 			else:
 				sys.exit()
-
 
 	def extractModels(self):
 		""" Extracts separate models from a multi-model PDB/PDBQT file. Uses an awk script. """
@@ -315,7 +324,6 @@ class Screen(object):
 
 			os.chdir(self.protocol_dir)
 
-
 	def gatherResults(self):
 		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """
 
@@ -352,8 +360,6 @@ class Screen(object):
 				else:
 				 	self.results[self.options['receptor']][lig_name] = energy
 
-
-
 	def writeCompleteSummary(self):
 		receptors = []
 		results = []
@@ -387,7 +393,6 @@ class Screen(object):
 			    f_csv = csv.writer(f)
 			    f_csv.writerow(["Ligands"] + receptors)
 			    f_csv.writerows(ligands)
-
 
 	def plot(self):
 		import numpy as np
@@ -436,17 +441,12 @@ class Screen(object):
 		return self.count['receptors']
 
 	def numberOfConfs(self):
-		""" Utility function to return the number of receptors. """
+		""" Utility function to return the number of conf files. """
 
 		self.count['confs'] = 0
 		for receptor in glob.glob('{ld}/confs/*.txt'.format(ld=self.ligand_dir)):
 				self.count['confs'] += 1
 		return self.count['confs']
-
-
-	def __getFileNameFromPath(self, path):
-		return os.path.splitext(os.path.basename(path))[0]
-
 
 class ScreenTests(object):
 	""" A class intended for testing. """
@@ -456,4 +456,3 @@ class ScreenTests(object):
 
 	def checkSetup(self):
 		return self.passed
-

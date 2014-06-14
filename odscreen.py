@@ -27,5 +27,3 @@ options['exhaustiveness'] = 10
 # ---------------------------------------------------------------------------- #
 
 od = run(options)
-
-print od.numberOfReceptors()

@@ -53,8 +53,6 @@ class Screen(object):
 		self.total = 0
 		self.sorted_results = []
 
-		self.determineTypeOfScreening()
-
 		# determining user variables
 		if parse:
 			self.options = self.parser()
@@ -72,6 +70,8 @@ class Screen(object):
 		self.cmd = runProcess()
 		self.cmd.verbose = verbose
 
+		self.determineTypeOfScreening()
+
 	def run(self):
 		# check that all necessary files are present
 		self.__checkStart()
@@ -85,7 +85,7 @@ class Screen(object):
 
 		# scanning the directory to make sure we detect any additions
 		self.__scanDirectory()
-		self.total = self.numberOfLigands()
+		self.total = len(self.ligands)
 
 		# at this point we know what ligands are present, and what the highest extension
 		# is for all of them. we can now prepare any files for docking that aren't already
@@ -143,8 +143,12 @@ class Screen(object):
 			Looks for a ligands folder. Also determines current state of the ligands.
 		"""
 
-		if os.path.isdir(self.ligand_dir+"/ligands") != True:
-			log("There is no ligand directory", colour="red")
+		if (
+			os.path.isdir(self.ligand_dir+"/ligands") or
+			os.path.isdir(self.ligand_dir+"/receptors") or
+			os.path.isdir(self.ligand_dir+"/confs")
+		) is not True:
+			log("There is an error in folder setup. Exiting now.", colour="red")
 			sys.exit()
 
 	def __scanDirectory(self):
@@ -177,9 +181,24 @@ class Screen(object):
 
 	def determineTypeOfScreening(self):
 		self.count = {}
-		self.count['ligands'], self.count['receptors'] = 0, 0
+		self.count['ligands'], self.count['receptors'], self.count['confs'] = 0, 0, 0
+
 		self.count['ligands'] = self.numberOfLigands()
 		self.count['receptors'] = self.numberOfReceptors()
+		self.count['confs'] = self.numberOfConfs()
+
+		l, r, c = self.count['ligands'], self.count['receptors'], self.count['confs']
+
+		self.screening_type = []
+		if c > 1:
+			self.screening_type.append('multi-conf')
+			self.options['multiple_confs'] = True
+
+		if l > 1:
+			self.screening_type.append('multi-ligand')
+
+		if r > 1:
+			self.screening_type.append('multi-receptor')
 
 
 	def convertToPDB(self):
@@ -210,7 +229,6 @@ class Screen(object):
 			extension = self.ligands[cmpnd]
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
 
-			# logic not right
 			if not(cmpnd in self.minimised) and not(self.ligands[cmpnd] == '.pdbqt'):
 				self.cmd.run('obminimize -sd -c 1e-5 {ld}/ligands/{name}.pdb'.format(ld=self.ligand_dir, name=cmpnd))
 				self.minimised.append(cmpnd)
@@ -404,16 +422,27 @@ class Screen(object):
 	def numberOfLigands(self):
 		""" Utility function to return the number of ligands to convert. """
 
-
-		return len(self.ligands)
+		self.count['ligands'] = 0
+		for receptor in glob.glob('{ld}/ligands/*.pdbqt'.format(ld=self.ligand_dir)):
+				self.count['ligands'] += 1
+		return self.count['ligands']
 
 	def numberOfReceptors(self):
 		""" Utility function to return the number of receptors. """
 
-		for receptor in glob.glob('{ld}/receptors/*.pdbqt'.format(self.ligand_dir)):
+		self.count['receptors'] = 0
+		for receptor in glob.glob('{ld}/receptors/*.pdbqt'.format(ld=self.ligand_dir)):
 				self.count['receptors'] += 1
-
 		return self.count['receptors']
+
+	def numberOfConfs(self):
+		""" Utility function to return the number of receptors. """
+
+		self.count['confs'] = 0
+		for receptor in glob.glob('{ld}/confs/*.txt'.format(ld=self.ligand_dir)):
+				self.count['confs'] += 1
+		return self.count['confs']
+
 
 	def __getFileNameFromPath(self, path):
 		return os.path.splitext(os.path.basename(path))[0]

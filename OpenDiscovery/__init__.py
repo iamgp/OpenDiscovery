@@ -8,8 +8,7 @@ import sys
 import os
 import errno
 
-
-def log(message="", verbose=True, colour=None, background=None, bold=False, underline=False, inverted=False, run=False):
+def log(message="", verbose=True, colour=None, background=None, bold=False, underline=False, inverted=False, run=False, ret=False):
     """ log() prints a message that is formatted properly.
 
         Using ANSI colour and formatting strings, log() prints out a formatted
@@ -27,7 +26,7 @@ def log(message="", verbose=True, colour=None, background=None, bold=False, unde
             'blue':     '94',
             'magenta':  '95',
             'cyan':     '96',
-            'white':    '97'
+            'white':    '97',
         }
 
         backgrounds = {
@@ -54,6 +53,9 @@ def log(message="", verbose=True, colour=None, background=None, bold=False, unde
         if inverted:
             message = '\033[7m' + message + '\033[27m'
 
+        if ret:
+            return message
+
         if run:
             print message,
         else:
@@ -64,22 +66,42 @@ def log(message="", verbose=True, colour=None, background=None, bold=False, unde
 
 def logHeader(message):
     """logHeader() prints out a formatted message which is used for heading sections."""
-    message = '\033[1m' + message + '\033[21m'
-    message = '\n\n\033[34m ==> \033[0m' + message
+
+    message = '\n{message}'.format(message=message)
     print message
 
 
 class ProgressBar(object):
     """A Simple class for showing a progress bar to the user"""
 
-    def __init__(self, progress, total, symbol="█"):
-        percentage = (progress * 100) / total
-        bar = "     \033[94m" + (symbol * (4 * percentage / 20)) + "\033[0m"  + \
-            (symbol * (20 - (4 * percentage / 20)) ) + \
-            " " + str(progress) + "/" + str(total)
-        sys.stdout.write('\r' + bar)
-        sys.stdout.flush()
+    def __init__(self, progress, total, message, newline=True):
+        message = """  \033[38;5;204m{message:<20}\033[0m """.format(message=message)
 
+        import time
+
+        time.sleep(0.05)
+
+        progress += 1
+        percentage = (progress*10/total) #(divided by 10)
+        percentage_left = 10 - percentage
+
+        bar = '['
+        bar += percentage * log('*', colour="white", ret=True)
+        bar += percentage_left * log('*', colour="black", ret=True)
+        bar += ']'
+        bar += ' {}'.format(progress)
+
+        string = ''
+        if progress != total:
+            if progress == 1 and newline == True:
+                string = '\n\r {message} {bar}'.format(message=message, bar=bar)
+            else:
+                string = '\r {message} {bar}'.format(message=message, bar=bar)
+        else:
+                string = '\r {message} {bar}'.format(message=message, bar=bar)
+
+        sys.stdout.write(string)
+        sys.stdout.flush()
 
 def makeFolder(path):
     """Attempts folder creation

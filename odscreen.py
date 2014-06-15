@@ -19,7 +19,6 @@ from OpenDiscovery.screen import run
 options                   = {}
 options['directory']      = '~/Desktop/OD_Experiment/'
 options['exhaustiveness'] = 10
-options['verbose'] = True
 
 # ---------------------------------------------------------------------------- #
 # Run the screening								 			   				   #

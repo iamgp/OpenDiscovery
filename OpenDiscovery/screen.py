@@ -2,7 +2,6 @@
 from . import *
 import os
 import sys
-import subprocess
 import glob
 import json
 import shutil
@@ -20,13 +19,14 @@ def run(options = []):
 	# ! TODO
 	# should probably put this receptor iteration logic into the Screen class
 	# will leave it for now!
-	for receptor in glob.glob(receptor_folder):
+	for i, receptor in enumerate(glob.glob(receptor_folder)):
 		receptor_name, receptor_extension = os.path.splitext(os.path.basename(os.path.normpath(receptor)))
 		s = Screen (
 			parse 			= tryForKeyInDict('parse',         options, False),
 			directory 		= tryForKeyInDict('directory',     options, '~'),
 			exhaustiveness 	= tryForKeyInDict('exhaustivenes', options, 20),
 			verbose 		= tryForKeyInDict('verbose',       options, False),
+			header 			= True if i == 0 else False,
 			receptor 		= receptor_name
 		)
 		s.run()
@@ -45,10 +45,20 @@ class Screen(object):
 		Instantiates variables variables and runs methods that perform the screening.
 	"""
 
-	def __init__(self, parse = False, directory = '', receptor = '', exhaustiveness = '20', driver = 'vina', verbose = False):
+	def __init__(
+		self,
+		parse          = False,
+		directory      = '',
+		receptor       = '',
+		exhaustiveness = '20',
+		driver         = 'vina',
+		verbose        = False,
+		header 		   = False
+	):
 
 		# initialising ivars
 		self.options = {}
+		self.options['pretty_header'] = header
 		self.ligands = {}
 		self.minimised = []
 		self.results = {}
@@ -89,6 +99,9 @@ class Screen(object):
 		self.total = self.__scanDirectoryAndUpdateLigandState()
 
 	def run(self):
+
+		self.__header()
+
 		# at this point we know what ligands are present, and what the highest extension
 		# is for all of them. we can now prepare any files for docking that aren't already
 		# a pdbqt
@@ -178,14 +191,24 @@ class Screen(object):
 	def __header(self):
 		""" Simply presents a pretty header to the user. """
 
+		if self.options['pretty_header']:
+			import platform, datetime
+			log("""\n\n
+  `-:-.   ,-;"`-:-.   ,-;"`-:-.   ,-;"`-:-.   ,-;"
+     `=`,'=/     `=`,'=/     `=`,'=/     `=`,'=/
+       y==/        y==/        y==/        y==/
+     ,=,-<=`.    ,=,-<=`.    ,=,-<=`.    ,=,-<=`.
+  ,-'-'   `-=_,-'-'   `-=_,-'-'   `-=_,-'-'   `-=_
+\n""")
+			log('  OpenDiscovery {v}'.format(v=__version__), bold=True, colour="white")
+			log('  Time started: {d}'.format(d=datetime.datetime.now().strftime("%Y-%m-%d %H:%M")), colour="black")
+			log('  Platform: {p}'.format(p=platform.platform()), colour="black")
+			log('  Ligand Dir: {l}'.format(l=self.ligand_dir), colour="black")
+			log('  Exhaustiveness: {e}'.format(e=self.options['exhaustiveness']), colour="black")
+			log('  Driver: {d}'.format(d=self.options['driver']), colour="black")
+
 		log('')
-		log('+------------------------------------+')
-		log('|           OPEN DISCOVERY           |')
-		log('|          Screening Module          |')
-		log('+------------------------------------+')
-		log('| Version: {0}                     |'.format(__version__))
-		log('| URL:     www.opendiscovery.co.uk   |')
-		log('+------------------------------------+')
+		log('  {receptor}'.format(receptor=self.options['receptor']), bold=True, colour="yellow")
 
 	def __getFileNameFromPath(self, path):
 		return os.path.splitext(os.path.basename(path))[0]
@@ -216,10 +239,8 @@ class Screen(object):
 	def convertToPDB(self):
 		""" Converts the ligands into a PDB file using obabel, if currently not a PDB. """
 
-		logHeader(self.options['receptor'])
-		logHeader('Converting to PDBs')
 		for index, cmpnd in enumerate(self.ligands):
-			ProgressBar(index+1, self.total)
+			ProgressBar(index, self.total, 'Converting to PDBs: ', newline=False)
 
 			extension = self.ligands[cmpnd]
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
@@ -233,9 +254,8 @@ class Screen(object):
 	def minimisePDBs(self):
 		""" Minimises the ligand PDBs using obabel. """
 
-		logHeader('Minimising Ligands')
 		for index, cmpnd in enumerate(self.ligands):
-			ProgressBar(index+1, self.total)
+			ProgressBar(index, self.total, 'Minimising Ligands: ')
 
 			extension = self.ligands[cmpnd]
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
@@ -249,9 +269,8 @@ class Screen(object):
 	def preparePDBQTs(self):
 		""" Converts the minimised ligands to PDBQT for Vina use. """
 
-		logHeader('Preparing PDBQTs')
 		for index, cmpnd in enumerate(self.ligands):
-			ProgressBar(index+1, self.total)
+			ProgressBar(index, self.total, 'Preparing PDBQTs: ')
 
 			extension = self.ligands[cmpnd]
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+extension
@@ -269,10 +288,8 @@ class Screen(object):
 	def performScreening(self):
 		""" Use the docking driver to perform the actual docking. """
 
-		logHeader('Perform Screening')
-
 		for index, cmpnd in enumerate(self.ligands):
-			ProgressBar(index+1, self.total)
+			ProgressBar(index, self.total, 'Perform Screening: ')
 
 			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
 
@@ -283,8 +300,6 @@ class Screen(object):
 
 	def extractModels(self):
 		""" Extracts separate models from a multi-model PDB/PDBQT file. Uses an awk script. """
-
-		logHeader('Extracting Models')
 
 		# if we have multiple confs, make array of all of them
 		# self.confs = []
@@ -308,6 +323,9 @@ class Screen(object):
 			lig_name = self.__getFileNameFromPath(l)
 
 			# extract modes
+
+			ProgressBar(index, self.numberOfConfs(), 'Extracting Models: ')
+
 		 	self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(pd=self.protocol_dir, results=lig_name + ".pdbqt"))
 
 		 	# make new folder for them
@@ -327,7 +345,6 @@ class Screen(object):
 	def gatherResults(self):
 		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """
 
-		logHeader('Gathering Results')
 		self.results[self.options['receptor']] = {}
 
 		results_folder = []
@@ -341,9 +358,11 @@ class Screen(object):
 		else:
 			results_folder.append(self.ligand_dir + "/results-" + self.options['receptor'])
 
+		current = 0
 	  	for rf in results_folder:
 	  		short = os.path.splitext(os.path.basename(rf))[0]
 			open(rf+'/summary.csv', 'w').close()
+
 			for index, result in enumerate(glob.glob(rf+'/*/')):
 			    lig_name = os.path.basename(os.path.normpath(result))
 			    conf_file = os.path.basename(os.path.abspath(os.path.join(result, os.pardir)))
@@ -353,12 +372,15 @@ class Screen(object):
 			                energy = line.split()[1]
 			                with open(rf+'/summary.csv', 'a') as summary:
 			                    summary.write('{0},{1}\n'.format(lig_name, float(energy)))
-				ProgressBar(index+1, self.total)
+
+				ProgressBar(current, self.numberOfConfs(), 'Gathering Results: ')
+				current = current + 1
 
 				if self.options['multiple_confs'] == True:
 				 	self.results[self.options['receptor']][conf_file][lig_name] = energy
 				else:
 				 	self.results[self.options['receptor']][lig_name] = energy
+	 	log('')
 
 	def writeCompleteSummary(self):
 		receptors = []

@@ -5,7 +5,7 @@ python:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 #install: python setup.py install
 install:
-  - pip install -q -e . --use-mirrors
+  - pip install -q -e .
 # command to run tests, e.g. python setup.py test
 script:
   nosetests

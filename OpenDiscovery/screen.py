@@ -29,7 +29,7 @@ def run(options = []):
 		s = Screen (
 			parse 			= tryForKeyInDict('parse',         options, False),
 			directory 		= tryForKeyInDict('directory',     options, '~'),
-			exhaustiveness 	= tryForKeyInDict('exhaustivenes', options, 20),
+			exhaustiveness 	= tryForKeyInDict('exhaustiveness', options, 20),
 			verbose 		= tryForKeyInDict('verbose',       options, False),
 			header 			= True if i == 0 else False,
 			receptor 		= receptor_name
@@ -78,7 +78,7 @@ class Screen(object):
 			self.options['receptor'] = receptor
 			self.options['exhaustiveness'] = exhaustiveness
 			self.options['driver'] = driver
-			self.options['multiple_confs'] = True
+			self.options['verbose'] = verbose
 
 		self.protocol_dir = os.path.abspath(os.path.split(sys.argv[0])[0])
 		self.ligand_dir = os.path.abspath(os.path.expanduser(self.options['directory']))
@@ -195,6 +195,10 @@ class Screen(object):
 
 		return len(self.ligands)
 
+	def __getConfsForReceptor(self, rec):
+		return [conf for conf in glob.glob(self.ligand_dir+'/confs/'+rec+'*')]
+
+
 	def __header(self):
 		""" Simply presents a pretty header to the user. """
 
@@ -236,7 +240,6 @@ class Screen(object):
 		self.screening_type = []
 		if c > 1:
 			self.screening_type.append('multi-conf')
-			self.options['multiple_confs'] = True
 
 		if l > 1:
 			self.screening_type.append('multi-ligand')
@@ -298,15 +301,27 @@ class Screen(object):
 	def performScreening(self):
 		""" Use the docking driver to perform the actual docking. """
 
-		for index, cmpnd in enumerate(self.ligands):
-			ProgressBar(index, self.total, 'Perform Screening: ')
+		#iterate over conf
+		total_screenings = self.numberOfConfs() * self.numberOfLigands()
 
-			full_name = self.ligand_dir+'/ligands/'+cmpnd+'.pdbqt'
+		screened = 0
 
-			if self.options['driver'].lower() == 'vina':
-				Vina(self, cmpnd, self.cmd.verbose, self.options['multiple_confs']).run()
-			else:
-				sys.exit()
+		for conf in glob.glob(self.ligand_dir+"/confs/"+self.options['receptor']+"*.txt"):
+			conf_name = self.__getFileNameFromPath(conf)
+
+			for ligand in self.ligands:
+				ProgressBar(screened, total_screenings, 'Perform Screening: ')
+				screened += 1
+
+				if self.options['driver'].lower() == 'vina':
+					Vina(screen=self, ligand=ligand, conf=conf_name).run()
+				else:
+					sys.exit()
+
+
+
+
+
 
 	def extractModels(self):
 		""" Extracts separate models from a multi-model PDB/PDBQT file. Uses an awk script. """
@@ -314,18 +329,15 @@ class Screen(object):
 		# if we have multiple confs, make array of all of them
 		# self.confs = []
 		lf = []
-		if self.options['multiple_confs'] == True:
-			self.confs = []
-			for conf in glob.glob(self.ligand_dir + "/confs/" + self.options['receptor'] + "*"):
-				self.confs.append(self.__getFileNameFromPath(conf))
+		self.confs = []
+		for conf in glob.glob(self.ligand_dir + "/confs/" + self.options['receptor'] + "*"):
+			self.confs.append(self.__getFileNameFromPath(conf))
 
-			# so we have confs, receptor, ligands arrays
-			# we need to loop over results-X/conf/*/ to get all ligand folders
-			for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*/*.pdbqt"):
-				lf.append(screened)
-		else:
-			for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*.pdbqt"):
-				lf.append(screened)
+		# so we have confs, receptor, ligands arrays
+		# we need to loop over results-X/conf/*/ to get all ligand folders
+		for screened in glob.glob(self.ligand_dir + "/results-" + self.options['receptor'] + "/*/*.pdbqt"):
+			lf.append(screened)
+
 
 		# for each ligand, we need to run the awk script to extract the energy
 		for index, l in enumerate(lf):
@@ -358,15 +370,11 @@ class Screen(object):
 		self.results[self.options['receptor']] = {}
 
 		results_folder = []
-		if self.options['multiple_confs'] == True:
-			for conf_file in glob.glob(self.ligand_dir + "/confs/"+self.options['receptor']+"*"):
-				short = os.path.splitext(os.path.basename(conf_file))[0]
-				results = self.ligand_dir + "/results-" + self.options['receptor'] + "/" + short
-				results_folder.append(results)
-				self.results[self.options['receptor']][short] = {}
-
-		else:
-			results_folder.append(self.ligand_dir + "/results-" + self.options['receptor'])
+		for conf_file in glob.glob(self.ligand_dir + "/confs/"+self.options['receptor']+"*"):
+			short = os.path.splitext(os.path.basename(conf_file))[0]
+			results = self.ligand_dir + "/results-" + self.options['receptor'] + "/" + short
+			results_folder.append(results)
+			self.results[self.options['receptor']][short] = {}
 
 		current = 0
 	  	for rf in results_folder:
@@ -386,10 +394,8 @@ class Screen(object):
 				ProgressBar(current, self.numberOfConfs(), 'Gathering Results: ')
 				current = current + 1
 
-				if self.options['multiple_confs'] == True:
-				 	self.results[self.options['receptor']][conf_file][lig_name] = energy
-				else:
-				 	self.results[self.options['receptor']][lig_name] = energy
+				self.results[self.options['receptor']][conf_file][lig_name] = energy
+
 	 	log('')
 
 	def writeCompleteSummary(self):

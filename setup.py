@@ -30,9 +30,9 @@ setup(
     url='https://github.com/iamgp/OpenDiscovery',
     packages=['OpenDiscovery', 'OpenDiscovery.pyPDB'],
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
-    package_data={'OpenDiscovery': ['lib/vina-osx/*', 'lib/vina-linux/*', 'lib/*.aw']},
+    package_data={'OpenDiscovery': ['lib/vina-osx/*', 'lib/vina-linux/*', 'lib/*.awk']},
     include_package_data=True,
-    install_requires=['matplotlib>0', 'pandas>0'],
+    install_requires=['matplotlib>0', 'pandas>0', 'numpy>0'],
     license="GPL",
     keywords='OpenDiscovery',
     classifiers=[
@@ -48,5 +48,5 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry'
     ],
-    scripts=['odscreen.py', 'odmscreen.py']
+    scripts=['odscreen.py']
 )

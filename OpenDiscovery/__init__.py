@@ -78,8 +78,7 @@ class ProgressBar(object):
         message = """  \033[38;5;204m{message:<20}\033[0m """.format(message=message)
 
         import time
-
-        time.sleep(0.05)
+        time.sleep(0.01)
 
         progress += 1
         percentage = (progress*10/total) #(divided by 10)

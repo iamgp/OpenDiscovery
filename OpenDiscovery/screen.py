@@ -9,6 +9,11 @@ import csv
 import operator
 from Vina import *
 from runProcess import runProcess
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import math
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 __version__ = '2.2'
 
@@ -120,6 +125,8 @@ class Screen(object):
 		# save files
 		self.save()
 
+		self.writeCompleteSummary()
+
 		# breathe!
 
 	def load(self):
@@ -212,6 +219,9 @@ class Screen(object):
 
 	def __getFileNameFromPath(self, path):
 		return os.path.splitext(os.path.basename(path))[0]
+
+	def __getDirNameFromPath(self, path):
+		return os.path.basename(os.path.normpath(path))
 
 	def determineTypeOfScreening(self):
 		self.count = {}
@@ -391,60 +401,50 @@ class Screen(object):
 			receptors.append(r)
 			results.append(self.results[r])
 
+		self.receptor_array = receptors
 
-		if self.options['multiple_confs'] == True:
-			# results are in 'results' => receptor => conf => ligand
-			# let's make a summary file per receptor
-			print 'cannot merge results for >2 dimensions'
-		else:
-			for l in self.ligands:
-				x = l
-				asdf = (l,)
-				for rec in receptors:
-					y = self.results[rec][l]
-					x = x + ", " + y
-					asdf = asdf + (y,)
+		# results are in 'results' => receptor => conf => ligand
+		# let's make a summary file per receptor
+		log('\n  Analysing Results \n',bold=True, colour="yellow")
 
-				ligands.append(asdf)
+		self.receptor_results = {}
+		for receptor in receptors:
+			confs, short_confs = [], []
+			df = []
+			for conf in glob.glob(self.ligand_dir+'/results-'+receptor+'/*/'):
+				confs.append(conf+'/summary.csv')
+				short_confs.append(self.__getDirNameFromPath(conf))
+				df.append(pd.read_csv(conf+'/summary.csv', names=['ligand', self.__getDirNameFromPath(conf)], index_col=0))
 
-			for i in ligands:
-				res.append(i)
+			self.receptor_results[receptor] = pd.concat(df, axis=1)
+			self.receptor_results[receptor].to_csv(self.ligand_dir+'/results-'+receptor+'/receptor-summary.csv')
 
+		return self.receptor_results
 
-			with open(self.ligand_dir + '/od_complete.csv','w') as f:
-			    f_csv = csv.writer(f)
-			    f_csv.writerow(["Ligands"] + receptors)
-			    f_csv.writerows(ligands)
+	def plot(self, show=True, save=False):
+		number_of_subplots=self.numberOfReceptors()
+		nrows = int(math.ceil(number_of_subplots / 2.))
 
-	def plot(self):
-		import numpy as np
-		import matplotlib.pyplot as plt
-		import pandas as pd
+		fig, axs = plt.subplots(2, nrows)
+		for ax, receptor in zip(axs.flat, self.receptor_array):
+			data = self.receptor_results[receptor]
+			heatmap = ax.pcolor(data.T, cmap=plt.cm.autumn)
+			ax.set_title(receptor)
+			ax.set_xticks(np.arange(data.shape[0]) + 0.5, minor=False)
+			ax.set_yticks(np.arange(data.shape[1]) + 0.5, minor=False)
+			ax.set_yticklabels(data.columns.values.tolist(), minor=False)
+			ax.set_xticklabels(data.index, minor=False)
+			ax.invert_yaxis()
 
-		receptors = []
-		for r in self.results:
-			receptors.append(r)
+		plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
+		cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+		plt.colorbar(heatmap, cax=cbar_ax)
 
-		data = pd.read_csv(self.ligand_dir + '/od_complete.csv', index_col=0).sort_index()
-		fig, ax = plt.subplots()
-		heatmap = ax.pcolor(data, cmap=plt.cm.autumn)
+		if save:
+			plt.savefig(self.ligand_dir+"/heatmap.pdf")
 
-		ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
-		ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
-
-		ax.invert_yaxis()
-		ax.xaxis.tick_top()
-
-		# Set the labels
-		ax.set_xticklabels(receptors, minor=False)
-		ax.set_yticklabels(data.index, minor=False)
-
-		#plt.xticks(rotation=45)
-		plt.colorbar(heatmap)
-
-		plt.savefig(self.ligand_dir+"/heatmap.pdf")
-
-		print '\n'
+		if show:
+			plt.show()
 
 	def numberOfLigands(self):
 		""" Utility function to return the number of ligands to convert. """

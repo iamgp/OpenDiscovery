@@ -16,7 +16,7 @@ def makeFolder(path):
 class Vina(object):
 	"""Vina driver. Sets up locations of files. """
 
-	def __init__(self, screen, cmpnd, verbose = False, multiple_confs = False):
+	def __init__(self, screen, cmpnd, verbose = False, multiple_confs = True):
 		self.locations = {}
 		self.screen = screen
 		self.cmd = runProcess()

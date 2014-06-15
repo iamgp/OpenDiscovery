@@ -18,10 +18,11 @@ from OpenDiscovery.screen import run
 
 options                   = {}
 options['directory']      = '~/Desktop/OD_Experiment/'
-options['exhaustiveness'] = 10
+options['exhaustiveness'] = 1
+
 
 # ---------------------------------------------------------------------------- #
 # Run the screening								 			   				   #
 # ---------------------------------------------------------------------------- #
 
-od = run(options)
+od = run(options).plot(save=True)

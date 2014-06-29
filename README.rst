@@ -1,5 +1,4 @@
-`www.opendiscovery.org.uk <http://www.opendiscovery.org.uk>`__
-`www.opendiscovery.co.uk <http://www.opendiscovery.co.uk>`__
+# OpenDiscovery
 
 Version: 2.2
 
@@ -10,10 +9,10 @@ Introduction
 
 Open Discovery is a suite of programs that use Open Source or freely
 available tools to dock a library of chemical compounds against a
-receptor protein. In a (currently submitted) paper in the Journal of
+receptor protein. In a paper in the Journal of
 Chemical Education, we outline the usefulness of having an
 uncomplicated, free-to-use protocol to accomplish a task that has been
-the subject of academic and commercial interest for decades. We also
+the subject of academic and commercial interest for decades [1]. We also
 highlight the gaps in open source tools around preparing protein -
 ligand complexes for molecular simulation, an area we expect to develop
 in the future.
@@ -27,13 +26,47 @@ Dependencies
    with: 2.3.1)
 -  AutoDock Vina binary (provided in lib folder, but downloaded from
    http://vina.scripps.edu - version developed with: 1.1.2)
+-  OpenDiscovery is most easily obtained using `pip`, the python package manager. Pip installs all the python dependencies that are required.
+
+Pip installation
+------------
+You can find all the methods of installing pip by looking at the documentation for it [here](http://opendiscovery.co.uk/pip.readthedocs.org/en/latest/installing.html).
+
+However, the simplest way is to download [get_pip.py](https://raw.github.com/pypa/pip/master/contrib/get-pip.py), and using terminal, run it through the python interpreter. After, check it is installed properly by retrieving its version:
+
+```bash
+mkdir ~/pip && cd ~/pip
+wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+sudo python get_pip.py
+rm -r ~/pip
+pip -V
+```
+Please note: by typing 'sudo' you will be required to type your password. This allows the command root access to install files where they need to go.
+
+Using pip to install OpenDiscovery
+---------------------------------
+Assuming pip has installed correctly, OpenDiscovery can be installed by the following command:
+
+```bash
+sudo pip install OpenDiscovery
+```
+
+If you do not have root (such as on a cluster of workstations), pip can be used to install modules into a user directory:
+
+```bash
+pip install --user OpenDiscovery
+```
+
+There are other options [here](https://www.pik-potsdam.de/members/linstead/guides/python-on-the-cluster/installing-your-own-python-modules-on-the-cluster).
 
 Terminology
 -----------
 
--  Protocol Folder = the folder containing this readme and odscreen.py
--  Ligand Folder = the folder with the config file, the folder with the
-   ligands and the folder with the receptors in (PDB and PDBQT).
+* **Receptor**: The protein to which the chemical compound is docked to. Note: use AutoDockTools to prepare the receptor as described by its creators. The video tutorial includes a good introduction to docking.
+* **Exhaustiveness**: Somewhat ambigious, but can be thought of as being proportional to the amount of effort the docking uses to search all orientations, positions and rotations of the ligand.
+* **Ligand Folder**: The folder in which the conf files, ligands and receptor proteins are located.
+* **PDBQT**: A PDBQT file is a normal PDB file (i.e. atoms, chains, xyz coordinates etc.) with partial charges (Q) and atom types (T).
+* **Conf File**: Docking programs require a box in which they can look at different orientations, positions and rotations of the ligand. This should be created using AutoDockTools.
 
 Walkthrough
 -----------
@@ -41,3 +74,6 @@ Walkthrough
 A simple walkthrough for this new version will be created shortly.
 The original version can be found `here <http://walkthrough.opendiscovery.org.uk>`__
 
+References
+----------
+[1]: [Price, G. W., Gould, P. S. & Marsh, A. Use of Freely Available and Open Source Tools for In Silico Screening in Chemical Biology. J. Chem. Educ. (2014). doi:10.1021/ed400302u](http://pubs.acs.org/doi/full/10.1021/ed400302u)

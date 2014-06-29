@@ -79,3 +79,18 @@ The original version can be found [here](http://opendiscovery.co.uk/start.html)
 References
 ----------
 [1]: [Price, G. W., Gould, P. S. & Marsh, A. Use of Freely Available and Open Source Tools for In Silico Screening in Chemical Biology. J. Chem. Educ. (2014). doi:10.1021/ed400302u](http://pubs.acs.org/doi/full/10.1021/ed400302u)
+
+# Running OpenDiscovery
+## Setting up the ligand folder
+The receptor protein must be located within a folder named receptor. A PDB version must be present, and a PDBQT version, generated using [AutoDockTools](http://autodock.scripps.edu/resources/adt), must also be present with the same name as the PDB version. Finally, a conf file must be present, again with the same name, ending with a .txt extension.
+
+Note: the ligand folder can be placed anywhere on your computer. Just remember the path to it.
+
+Next, we need to set up the ligand folder. Here, we can place ligands in any format that open babel allows. For example, we could have X.pdb, Y.mol, Z.mol2 and so on.
+
+![](http://opendiscovery.co.uk/assets/images/ligand-folder.png)
+
+To be continued...
+
+# Contact
+IF you wish to get in contact, please email [Gareth Price](gareth.price@warwick.ac.uk).

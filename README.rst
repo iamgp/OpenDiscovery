@@ -48,12 +48,14 @@ Using pip to install OpenDiscovery
 Assuming pip has installed correctly, OpenDiscovery can be installed by the following command:
 
 ```bash
+# Installing OpenDiscovery globally
 sudo pip install OpenDiscovery
 ```
 
 If you do not have root (such as on a cluster of workstations), pip can be used to install modules into a user directory:
 
 ```bash
+# Installing OpenDiscovery locally in user folder
 pip install --user OpenDiscovery
 ```
 
@@ -72,7 +74,7 @@ Walkthrough
 -----------
 
 A simple walkthrough for this new version will be created shortly.
-The original version can be found `here <http://walkthrough.opendiscovery.org.uk>`__
+The original version can be found [here](http://opendiscovery.co.uk/start.html)
 
 References
 ----------

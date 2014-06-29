@@ -1,4 +1,5 @@
-# OpenDiscovery
+OpenDiscovery
+===================
 
 Version: 2.2
 

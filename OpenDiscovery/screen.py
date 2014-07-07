@@ -151,17 +151,6 @@ class Screen(object):
 		}
 		json.dump(data, open(self.ligand_dir + '/od.json', 'wb'), indent=4)
 
-	def parser(self):
-		""" Presents an argparse interface to the user. """
-
-		import argparse
-		parser = argparse.ArgumentParser(description='Open Discovery Screening Protocol')
-		parser.add_argument('-d', '--directory',help='Path to the ligand directory. Required!', required=True)
-		parser.add_argument('-e', '--exhaustiveness',help='Exhaustiveness. Default = 20.', type=int, default=20)
-		parser.add_argument('-r', '--receptor', help='Receptor Name. Must be located within the receptor folder. Default = receptor.', default='receptor')
-		parser.add_argument('-v', '--verbose', help='Enable verbose output. Default = False.', action='store_true', default=False)
-		return vars(parser.parse_args())
-
 	def __checkStart(self):
 		""" Checks if all is well before continuing the screening.
 
@@ -302,7 +291,7 @@ class Screen(object):
 		""" Use the docking driver to perform the actual docking. """
 
 		#iterate over conf
-		total_screenings = self.numberOfConfs() * self.numberOfLigands()
+		total_screenings = self.numberOfConfs()
 
 		screened = 0
 
@@ -411,8 +400,8 @@ class Screen(object):
 
 		# results are in 'results' => receptor => conf => ligand
 		# let's make a summary file per receptor
-		log('\n  Analysing Results \n',bold=True, colour="yellow")
-
+		#log('\n  Analysing Results \n',bold=True, colour="yellow")
+		printHeader('Analysing Results.')
 		self.receptor_results = {}
 		for receptor in receptors:
 			confs, short_confs = [], []

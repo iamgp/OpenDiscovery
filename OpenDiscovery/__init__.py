@@ -70,6 +70,9 @@ def logHeader(message):
     message = '\n{message}'.format(message=message)
     print message
 
+def printHeader(message):
+    print """\r   \033[38;5;204m{message:<20}\033[0m """.format(message=message)
+
 
 class ProgressBar(object):
     """A Simple class for showing a progress bar to the user"""

@@ -20,7 +20,6 @@ def read(fname):
 setup(
     name='OpenDiscovery',
     version=od.__version__,
-    release='0',
     description='Computational Drug Discovery Software',
     long_description=read('README.rst'),
     author='Gareth Price',
@@ -28,25 +27,23 @@ setup(
     maintainer='Gareth Price',
     maintainer_email='gareth.price@warwick.ac.uk',
     url='https://github.com/iamgp/OpenDiscovery',
-    packages=['OpenDiscovery', 'OpenDiscovery.pyPDB'],
+    packages=['OpenDiscovery'],
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
     package_data={'OpenDiscovery': ['lib/vina-osx/*', 'lib/vina-linux/*', 'lib/*.awk']},
     include_package_data=True,
-    install_requires=['matplotlib>0', 'pandas>0', 'numpy>0'],
+    install_requires=['matplotlib>=1.4', 'pandas>=0.14', 'numpy>1'],
     license="GPL",
     keywords='OpenDiscovery',
     classifiers=[
         'Development Status :: 4 - Beta',
-        'Environment :: MacOS X',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
-        'Operating System :: MacOS :: MacOS X',
         'Programming Language :: Python :: 2.7',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry'
     ],
-    scripts=['odscreen.py']
+    scripts=['bin/od_screen']
 )

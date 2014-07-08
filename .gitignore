@@ -3,6 +3,9 @@
 docs/
 misc/
 
+# example files
+odscreen.py
+
 # C extensions
 *.so
 *.cfg
@@ -37,11 +40,5 @@ nosetests.xml
 .project
 .pydevproject
 
-# Complexity
-output/*.html
-output/*/index.html
-
-# Sphinx
-docs/_build
 
 docs

@@ -60,3 +60,33 @@ echo "export PATH=\$HOME/amber14/bin:\$PATH" >> ~/.bashrc
 ```
 
 Everything should now be installed.
+
+## Extra software to consider
+### Gromacs
+GROMACS is a versatile package to perform molecular dynamics, known for its extremely high performance and open-source nature.
+
+We can use brew to install it:
+
+```bash
+#Installing Gromacs
+brew install gromacs
+```
+
+###Acpype
+Acpype is a tool based on Python to use Antechamber to generate topologies for chemical compounds. It is particularly useful to convert between Amber and Gromacs parameter files.
+
+```bash
+# Installing ACPype
+brew install subversion
+cd /opt
+sudo svn checkout http://svn.code.sf.net/p/ccpn/code/branches/stable/ccpn/python/acpype acpype
+ln -s /opt/acpype/acpype.py /usr/local/bin/acpype
+```
+
+###XMGrace
+Xmgrace is a 2D plotting tool which allows you to interactively modify plots, to set all kind of plot parameters, change the appearance of your figure, and to save the figure in the format of your choice.
+
+```bash
+# Simple!
+brew install grace
+```

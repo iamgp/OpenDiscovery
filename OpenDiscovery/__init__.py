@@ -79,8 +79,8 @@ def logHeader(message):
 
 def printHeader(message):
     if 'linux' in sys.platform:
-        print """\r   {message:<20} """.format(message=message)
-    if 'darwin' in sys.platform:
+        print """\r{message:<20} """.format(message=message)
+    elif 'darwin' in sys.platform:
         print """\r   \033[38;5;204m{message:<20}\033[0m """.format(message=message)
 
 
@@ -90,7 +90,7 @@ class ProgressBar(object):
     def __init__(self, progress, total, message, newline=True):
         if 'linux' in sys.platform:
             message = "{message:<20}".format(message=message)
-        elif 'linux' in sys.platform:
+        elif 'darwin' in sys.platform:
             message = """  \033[38;5;204m{message:<20}\033[0m """.format(message=message)
 
         import time

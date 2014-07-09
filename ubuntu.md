@@ -9,12 +9,14 @@ Installation of OpenDiscovery localy is preferred, and is the only way if you do
 We need to first install our own python.
 
 ```bash
+# Download python tarball
 curl -O https://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz
 ```
 
 Extract the contents and change the directory into it:
 
 ```bash
+# Unzip tarball and change directory into it
 tar xvf Python-2.7.8
 cd Python-2.7.8
 ```
@@ -22,24 +24,28 @@ cd Python-2.7.8
 Configure to make the make file:
 
 ```bash
+# Configure the make files
 ./configure
 ```
 
 Make the necessary folders:
 
 ```bash
+# Create the housing folders
 mkdir -p ~/usr/local
 ```
 
 Then run make:
 
 ```bash
+# Make the binaries
 make altinstall prefix=$HOME/usr/local exec-prefix=$HOME/usr/local
 ```
 
 Let's add the folder into our PATH and re-source the file:
 
 ```bash
+# Add the binaries to our PATH
 echo "export PATH=\$HOME/usr/local/bin:\$PATH" >> ~/.bashrc
 source ~/.bashrc
 ```
@@ -47,6 +53,7 @@ source ~/.bashrc
 Check your new python2.7 is working:
 
 ```bash
+# Check python is working
 which python2.7
 ```
 
@@ -56,6 +63,7 @@ which python2.7
 Let's install our own easy_install:
 
 ```bash
+# Download easy_install and build it against our new python
 curl -O http://python-distribute.org/distribute_setup.py
 ~/usr/local/bin/python2.7 distribute_setup.py
 ```
@@ -64,6 +72,7 @@ curl -O http://python-distribute.org/distribute_setup.py
 Let's check it is installed correctly:
 
 ```bash
+# Check easy_install is working
 which easy_install-2.7
 ```
 
@@ -72,6 +81,7 @@ which easy_install-2.7
 Easy_install installs stuff into ~/.local/bin, so let's add that to our .bashrc and re-source the file:
 
 ```bash
+# Add easy_install bin into our PATH
 echo "export PATH=\$HOME/.local/bin/:\$PATH" >> ~/.bashrc
 source ~/.bashrc
 ```
@@ -80,6 +90,7 @@ source ~/.bashrc
 Now we can use easy_install to install pip:
 
 ```bash
+# Install pip
 ~/usr/local/bin/easy_install-2.7 --user pip
 ```
 *Note, I am explicitely stating the full path of the easy_install-2.7 install, although if we have our PATH set up correctly this is only for completeness' sake.*
@@ -87,6 +98,7 @@ Now we can use easy_install to install pip:
 Like always, let's make sure pip is installed properly:
 
 ```bash
+# Check pip is working
 which pip2.7
 ```
 
@@ -96,6 +108,7 @@ which pip2.7
 And we can now use pip to install matplotlib, numpy and pandas:
 
 ```bash
+# Installing dependencies
 ~/.local/bin/pip2.7 install --user pandas
 ~/.local/bin/pip2.7 install --user numpy
 ~/.local/bin/pip2.7 install --user matplotlib
@@ -105,11 +118,13 @@ And we can now use pip to install matplotlib, numpy and pandas:
 
 Important: if you want to use plot() using matplotlib on on the server, you _must_ run the following commands after you've installed matplotlib:
 ```bash
+# Setup matplotlib config file
 echo "backend: Agg" > ~/.config/matplotlib/matplotlibrc
 ```
 
 And then OpenDiscovery:
 ```bash
+# Install OpenDiscovery
 ~/.local/bin/pip2.7 install --user OpenDiscovery
 ```
 
@@ -124,6 +139,7 @@ Download the sourcecode, untar it and upload the folder into your user directory
 Create a new directory for obabel and cd into it:
 
 ```bash
+# Make installation directory for openbabel
 mkdir -p ~/usr/local/obabel
 cd ~/usr/local/obabel
 ```
@@ -131,18 +147,21 @@ cd ~/usr/local/obabel
 Using cmake, let's make the makefiles:
 
 ```bash
+# Create the make file
 cmake ~/openbabel-2.3.2 -DCMAKE_INSTALL_PREFIX=~/usr/local/obabel
 ```
 
 Now let's `cd` into the openbabel install directory, and make this thing!:
 
 ```bash
+# Make and install the binaries
 cd ~/openbabel-2.3.2/
 make && make install
 ```
 
 It should finish after a while. Once it is done, all we need to do is add the binaries to our PATH:
 ```bash
+# Add the obabel binaries to the PATH
 echo "export PATH=\$HOME/usr/local/obabel/bin:\$PATH" >> ~/.bashrc
 source ~/.bashrc
 ```
@@ -156,6 +175,7 @@ If you would like to install OpenDiscovery globally, follow these instructions.
 Let's make sure we have the correct python dev tools. Also, while we're at it, we'll also install freetype and its dependencies.
 
 ```bash
+# Install python dev tools and freetype
 sudo apt-get install python-dev libfreetype6-dev libpng-dev
 ```
 
@@ -164,6 +184,7 @@ sudo apt-get install python-dev libfreetype6-dev libpng-dev
 You can follow the instructions that are described for the local installation, although there is another simpler way for global installation:
 
 ```bash
+# Install pip
 mkdir ~/pip && cd ~/pip
 wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
 sudo python get_pip.py
@@ -174,6 +195,7 @@ rm -r ~/pip
 
 We can now use pip to install Opendiscovery:
 ```bash
+# Install OpenDiscovery and dependencies
 pip install numpy matplotlib pandas OpenDiscovery
 ```
 

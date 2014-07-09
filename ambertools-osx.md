@@ -1,6 +1,6 @@
 #Installing ambertools on Mac OSX Mavericks
 
-#### Homebrew
+## Homebrew
 First we need to install homebrew, a package manager for OSX:
 
 ```bash
@@ -8,7 +8,7 @@ First we need to install homebrew, a package manager for OSX:
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
 
-#### GCC
+## GCC
 Using brew, we can now install GCC, and fortunately gfortran comes with it (at least in 4.8). This can take many minutes (mine took 30mins). Once it is done, we need to symlink some of the binaries.
 
 ```bash
@@ -32,7 +32,7 @@ ln -s /usr/local/bin/gcc-ar-4.8 /usr/local/bin/gcc-ar
 ln -s /usr/local/Cellar/gfortran/4.8.1/gfortran/lib/libgfortran.3.dylib /usr/local/lib/libgfortran.dylib
 ```
 
-####AmberTools
+## AmberTools
 Ambertools is freely available from [ambermd.org](http://ambermd.org/). Download the `tar.gz` and extract it into your home directory (~):
 
 ```bash

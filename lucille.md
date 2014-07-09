@@ -11,7 +11,7 @@ curl -O https://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz
 Extract the contents and change the directory into it:
 
 ```bash
-tar xvf Python-2.7.8 &&
+tar xvf Python-2.7.8
 cd Python-2.7.8
 ```
 
@@ -165,7 +165,7 @@ Now you have everything installed, all you need to do is submit a slurm script t
 odscreen -d ~/OD_Experiment -e 10
 ```
 
-#### ODScreen.py
+#### ODScreen.pym
 An example of odscreen.py is:
 ```python
 #! /usr/bin/env python

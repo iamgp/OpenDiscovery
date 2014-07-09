@@ -1,10 +1,10 @@
 Changelog
 =========
 
-2.2.7 (unreleased)
+2.2.7 (2014-07-09)
 ------------------
 
-- Nothing changed yet.
+- Fixed Manifest, again.
 
 
 2.2.6 (2014-07-09)
@@ -16,8 +16,11 @@ Changelog
 
 2.2.5 (2014-07-09)
 ------------------
-Fixed paths to binaries
+
+- Fixed paths to binaries
+
 
 2.2.4 (2014-07-09)
 ------------------
-Initial releases.
+
+- Initial releases.

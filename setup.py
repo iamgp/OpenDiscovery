@@ -38,6 +38,5 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry'
     ],
-    scripts=['bin/odscreen'],
-    zip_safe=False
+    scripts=['bin/odscreen']
 )

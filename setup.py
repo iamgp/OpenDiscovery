@@ -5,14 +5,7 @@ import os
 import sys
 import OpenDiscovery as od
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from distutils.core import setup
-
-if sys.argv[-1] == 'publish':
-    os.system('python setup.py sdist upload')
-    sys.exit()
+from setuptools import setup
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -29,10 +22,9 @@ setup(
     url='https://github.com/iamgp/OpenDiscovery',
     packages=['OpenDiscovery'],
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
-    package_data={'OpenDiscovery': ['lib/vina-osx/*', 'lib/vina-linux/*', 'lib/*.awk']},
+    package_data={'OpenDiscovery': ['lib/vina-osx/vina', 'lib/vina-linux/vina', 'lib/extract.awk']},
     include_package_data=True,
-   # install_requires=['matplotlib>=1.4', 'pandas>=0.14', 'numpy>1'],
-    install_requires=['argparse'],
+    install_requires=['argparse','matplotlib', 'pandas', 'numpy', 'pkg_resources'],
     license="GPL",
     keywords='OpenDiscovery',
     classifiers=[
@@ -46,5 +38,6 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry'
     ],
-    scripts=['bin/odscreen']
+    scripts=['bin/odscreen'],
+    zip_safe=False
 )

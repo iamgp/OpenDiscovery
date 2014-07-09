@@ -1,4 +1,4 @@
-#Installing ambertools on Mac OSX Mavericks
+#Installing ambertools on Mac OS
 
 ## Homebrew
 First we need to install homebrew, a package manager for OSX:

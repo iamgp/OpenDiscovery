@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 import math
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import pkg_resources
 
 __version__ = '2.2'
 
@@ -337,7 +338,9 @@ class Screen(object):
 
 			ProgressBar(index, self.numberOfConfs(), 'Extracting Models: ')
 
-		 	self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(pd=self.protocol_dir, results=lig_name + ".pdbqt"))
+		 	#self.cmd.run('awk -f {pd}/OpenDiscovery/lib/extract.awk < {results}'.format(pd=self.protocol_dir, results=lig_name + ".pdbqt"))
+			awk_location = pkg_resources.resource_filename('OpenDiscovery', 'lib/extract.awk')
+			self.cmd.run('awk -f {awk} < {results}'.format(awk=awk_location, results=lig_name + ".pdbqt"))
 
 		 	# make new folder for them
 		 	makeFolder(lig_name)
@@ -350,8 +353,6 @@ class Screen(object):
 		 		os.rename(lig_name+".pdbqt", lig_name+"/"+lig_name+".pdbqt")
 		 	except:
 		 		pass
-
-			os.chdir(self.protocol_dir)
 
 	def gatherResults(self):
 		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """

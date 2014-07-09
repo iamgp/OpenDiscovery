@@ -1,5 +1,6 @@
 import sys, os, errno, subprocess, glob
 from runProcess import runProcess
+import pkg_resources
 
 def makeFolder(path):
     """Attempts folder creation
@@ -33,9 +34,11 @@ class Vina(object):
 
 		# lets determine platform
 		if 'linux' in sys.platform:
-			self.locations['vina'] = screen.protocol_dir + "/OpenDiscovery/lib/vina-linux/vina"
+			#self.locations['vina'] = screen.protocol_dir + "/OpenDiscovery/lib/vina-linux/vina"
+			self.locations['vina'] = pkg_resources.resource_filename('OpenDiscovery', 'lib/vina-linux/vina')
 		elif 'darwin' in sys.platform:
-			self.locations['vina'] = screen.protocol_dir + "/OpenDiscovery/lib/vina-osx/vina"
+			#self.locations['vina'] = screen.protocol_dir + "/OpenDiscovery/lib/vina-osx/vina"
+			self.locations['vina'] = pkg_resources.resource_filename('OpenDiscovery', 'lib/vina-osx/vina')
 
 		self.locations['receptor'] = screen.ligand_dir + "/receptors/" + screen.options['receptor'] + ".pdbqt"
 		self.locations['ligand']   = screen.ligand_dir + "/ligands/"   + self.ligand                + ".pdbqt"

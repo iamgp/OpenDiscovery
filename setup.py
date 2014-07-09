@@ -24,7 +24,7 @@ setup(
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
     package_data={'OpenDiscovery': ['lib/vina-osx/vina', 'lib/vina-linux/vina', 'lib/extract.awk']},
     include_package_data=True,
-    install_requires=['argparse','matplotlib', 'pandas', 'numpy', 'pkg_resources'],
+    install_requires=['argparse','matplotlib', 'pandas', 'numpy'],
     license="GPL",
     keywords='OpenDiscovery',
     classifiers=[

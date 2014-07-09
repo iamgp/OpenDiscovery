@@ -1,4 +1,4 @@
 recursive-include OpenDiscovery *
-recursive-include bin *
+recursive-include bin/odscreen
 
 global-exclude *.pyc

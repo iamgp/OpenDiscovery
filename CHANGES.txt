@@ -1,10 +1,11 @@
 Changelog
 =========
 
-2.2.6 (unreleased)
+2.2.6 (2014-07-09)
 ------------------
 
-- Nothing changed yet.
+- Fixed manifest
+- Cleaned the way linux machines print logs
 
 
 2.2.5 (2014-07-09)

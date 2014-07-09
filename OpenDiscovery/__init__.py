@@ -2,7 +2,7 @@
 
 __author__ = 'Gareth Price'
 __email__ = 'gareth.price@warwick.ac.uk'
-__version__ = '2.2.6.dev0'
+__version__ = '2.2.6'
 
 import sys
 import os
@@ -78,14 +78,20 @@ def logHeader(message):
     print message
 
 def printHeader(message):
-    print """\r   \033[38;5;204m{message:<20}\033[0m """.format(message=message)
+    if 'linux' in sys.platform:
+        print """\r   {message:<20} """.format(message=message)
+    if 'darwin' in sys.platform:
+        print """\r   \033[38;5;204m{message:<20}\033[0m """.format(message=message)
 
 
 class ProgressBar(object):
     """A Simple class for showing a progress bar to the user"""
 
     def __init__(self, progress, total, message, newline=True):
-        message = """  \033[38;5;204m{message:<20}\033[0m """.format(message=message)
+        if 'linux' in sys.platform:
+            message = "{message:<20}".format(message=message)
+        elif 'linux' in sys.platform:
+            message = """  \033[38;5;204m{message:<20}\033[0m """.format(message=message)
 
         import time
         time.sleep(0.01)

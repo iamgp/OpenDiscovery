@@ -145,6 +145,7 @@ source ~/.bashrc
 ## Running OpenDiscovery
 Now you have everything installed, all you need to do is submit a slurm script to the queue. Something like the following would do:
 
+#### Slurm
 ```bash
 #!/bin/bash
 #
@@ -164,6 +165,7 @@ Now you have everything installed, all you need to do is submit a slurm script t
 odscreen -d ~/OD_Experiment -e 10
 ```
 
+#### ODScreen.py
 An example of odscreen.py is:
 ```python
 #! /usr/bin/env python

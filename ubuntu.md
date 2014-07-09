@@ -1,7 +1,11 @@
 # Setting up OpenDiscovery on Ubuntu Servers
-#### Email gareth.price@warwick.ac.uk for help.
 
-## Installing python
+Email gareth.price@warwick.ac.uk for help.
+
+## Installing OpenDiscovery locally 
+Installation of OpenDiscovery localy is preferred, and is the only way if you don't have root privelidges to your system.
+
+### Installing python
 We need to first install our own python.
 
 ```bash
@@ -48,7 +52,7 @@ which python2.7
 
 …should return `~/usr/local/bin/python2.7`
 
-## Installing Easy_Install
+### Installing Easy_Install
 Let's install our own easy_install:
 
 ```bash
@@ -72,7 +76,7 @@ echo "export PATH=\$HOME/.local/bin/:\$PATH" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-## Installing PIP
+### Installing PIP
 Now we can use easy_install to install pip:
 
 ```bash
@@ -88,7 +92,7 @@ which pip2.7
 
 …should return `~/.local/bin/pip2.7`
 
-## Installing python modules, including OpenDiscovery
+### Installing python modules, including OpenDiscovery
 And we can now use pip to install matplotlib, numpy and pandas:
 
 ```bash
@@ -96,6 +100,8 @@ And we can now use pip to install matplotlib, numpy and pandas:
 ~/.local/bin/pip2.7 install --user numpy
 ~/.local/bin/pip2.7 install --user matplotlib
 ```
+
+*Note, we could just run the OpenDiscovery installation, as pip will download dependencies, although it is sometimes easier to install things step-wise as above.*
 
 Important: if you want to use plot() using matplotlib on on the server, you _must_ run the following commands after you've installed matplotlib:
 ```bash
@@ -110,7 +116,7 @@ And then OpenDiscovery:
 *Note, I am explicitely stating the full path of the pip2.7 install, although if we have our PATH set up correctly this is only for completeness' sake.*
 
 
-## Installing OpenBabel
+### Installing OpenBabel
 Okay, nearly there. Let's compile OpenBabel.
 
 Download the sourcecode, untar it and upload the folder into your user directory (~).
@@ -141,6 +147,35 @@ echo "export PATH=\$HOME/usr/local/obabel/bin:\$PATH" >> ~/.bashrc
 source ~/.bashrc
 ```
 
+## Installing OpenDiscovery Globally
+
+If you would like to install OpenDiscovery globally, follow these instructions.
+
+### Installing python dev tools
+
+Let's make sure we have the correct python dev tools. Also, while we're at it, we'll also install freetype and its dependencies.
+
+```bash
+sudo apt-get install python-dev libfreetype6-dev libpng-dev
+```
+
+### Installing PIP
+
+You can follow the instructions that are described for the local installation, although there is another simpler way for global installation:
+
+```bash
+mkdir ~/pip && cd ~/pip
+wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+sudo python get_pip.py
+rm -r ~/pip
+```
+
+### Installing OpenDiscovery
+
+We can now use pip to install Opendiscovery:
+```bash
+pip install numpy matplotlib pandas OpenDiscovery
+```
 
 ## Running OpenDiscovery
 Now you have everything installed, all you need to do is submit a slurm script to the queue. Something like the following would do:
@@ -167,7 +202,7 @@ Now you have everything installed, all you need to do is submit a slurm script t
 odscreen -d ~/OD_Experiment -e 10
 ```
 
-#### ODScreen.pym
+#### ODScreen.py
 An example of odscreen.py is:
 ```python
 #! /usr/bin/env python
@@ -176,16 +211,16 @@ An example of odscreen.py is:
 from OpenDiscovery.screen import run
 
 # ---------------------------------------------------------------------------- #
-# Set up options 															   #
+# Set up options 															   
 # ---------------------------------------------------------------------------- #
-# Options available:														   #
-# 	- parse      		allows entry via the command line (all 				   #
-# 						other options are defunct) 							   #
-# 	- directory			tell OpenDiscovery where the files are 				   #
-# 						this is required! 									   #
-# 	- exhaustiveness	how much effort do you want to use? must be an integer #
-# 	- verbose			If True, all commands will show their output (useful   #
-# 						for debugging)										   #
+# Options available:														   
+# 	- parse      		allows entry via the command line (all 				   
+# 						other options are defunct) 							   
+# 	- directory			tell OpenDiscovery where the files are 				   
+# 						this is required! 									   
+# 	- exhaustiveness	how much effort do you want to use? must be an integer 
+# 	- verbose			If True, all commands will show their output (useful   
+# 						for debugging)										   
 # ---------------------------------------------------------------------------- #
 
 options                   = {}
@@ -194,7 +229,7 @@ options['exhaustiveness'] = 1
 options['verbose'] = True
 
 # ---------------------------------------------------------------------------- #
-# Run the screening								 			   				   #
+# Run the screening								 			   				   
 # ---------------------------------------------------------------------------- #
 
 od = run(options).plot(save=True)

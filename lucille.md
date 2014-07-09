@@ -97,7 +97,7 @@ And we can now use pip to install matplotlib, numpy and pandas:
 ~/.local/bin/pip2.7 install --user matplotlib
 ```
 
-Important: if you want to use plot() using matplotlib on lucille, you _must_ run the following commands after you've installed matplotlib:
+Important: if you want to use plot() using matplotlib on on the server, you _must_ run the following commands after you've installed matplotlib:
 ```bash
 echo "backend: Agg" > ~/.config/matplotlib/matplotlibrc
 ```
@@ -144,6 +144,8 @@ source ~/.bashrc
 
 ## Running OpenDiscovery
 Now you have everything installed, all you need to do is submit a slurm script to the queue. Something like the following would do:
+
+*Note: Slurm is a queueing system that is commonly used. If your server uses a different manager, change the script appropriately below.*
 
 #### Slurm
 ```bash

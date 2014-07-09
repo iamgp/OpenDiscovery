@@ -16,7 +16,7 @@ import math
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pkg_resources
 
-__version__ = '2.2'
+#__version__ = '2.2'
 
 def run(options = []):
 	directory = os.path.abspath(os.path.expanduser(options['directory']))

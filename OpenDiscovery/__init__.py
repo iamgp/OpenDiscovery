@@ -2,7 +2,7 @@
 
 __author__ = 'Gareth Price'
 __email__ = 'gareth.price@warwick.ac.uk'
-__version__ = '2.2.4'
+__version__ = '2.2.5'
 
 import sys
 import os

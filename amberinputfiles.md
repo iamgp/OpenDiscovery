@@ -3,7 +3,7 @@ Note: [Amber](http://ambermd.org) is commercial software.
 
 ## Cleaning the Receptor
 
-> The only required or useful data in a PDB file to set up AMBER simulations are: atom names, residue names, and maybe chain identifiers (if more than one chain is present), and the coordinates of heavy atoms
+The only required or useful data in a PDB file to set up AMBER simulations are: atom names, residue names, and maybe chain identifiers (if more than one chain is present), and the coordinates of heavy atoms
 
 Most of the recommended steps to clean a system can be achieved with the `pdb4amber` and `reduce` programs, although don't use these commands like a blindly! Inspect the output to make sure it is as you need it (some general pointers are below).```bash
 # Preparing the receptor PDB file
@@ -26,7 +26,7 @@ We need to delete all peptide hydrogens before running `reduce`.You can do this 
 
 ## Antechamber 
 
-> **Antechamber** is the main program to develop force fields for drug-like molecules or modified amino acids using the general Amber force field (GAFF). These can be used directly in LEaP, or can serve as a starting point for further parameter development.
+**Antechamber** is the main program to develop force fields for drug-like molecules or modified amino acids using the general Amber force field (GAFF). These can be used directly in LEaP, or can serve as a starting point for further parameter development.
 
 We have a receptor file ready to use, now it is time for the ligands. `antechamber` can perform many file conversions, and can also assign atomic charges and atom types.
 
@@ -48,7 +48,7 @@ acdoctor -i lig.ante.mol2 -f mol2
 
 ## Parmchk2
 
-> **Parmchk2** is a program that analyzes an input force field library file (mol2 or amber prep), and extracts relevant parameters into an frcmod file.
+**Parmchk2** is a program that analyzes an input force field library file (mol2 or amber prep), and extracts relevant parameters into an frcmod file.
 
 `parmchk2` reads in an ac/**mol2**/prepi/prepc file and writes out a force field modification (**frcmod**) file containing any force field parameters that are needed for the molecule but not supplied by the force field (*.dat) file. Problematic parameters, if any, are indicated in the frcmod file with the note, “ATTN, need revision”, and are typically given values of zero.
 
@@ -60,7 +60,7 @@ parmchk2 -i lig.ante.mol2 -f mol2 -o lig.frcmod
 
 ## LEaP
 
-> **LEaP** is the primary program to create a new system in Amber, or to modify existing systems. It combines the functionality of prep, link, edit and parm from much earlier versions of Amber.
+**LEaP** is the primary program to create a new system in Amber, or to modify existing systems. It combines the functionality of prep, link, edit and parm from much earlier versions of Amber.
 
 There are two modes: 
 * **tLEaP**, which does not require an X-window and is purely shell based.

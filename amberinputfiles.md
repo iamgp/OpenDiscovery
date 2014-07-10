@@ -1,4 +1,7 @@
-### tleaP
+#Amber Input files
+Amber is commercial software.
+
+## tleaP
 
 You can run this using `tleap -s -f tleap.in`
 
@@ -24,9 +27,9 @@ savePdb COM lig.com.solv.pdb
 quit
 ```
 
-### MD
+## MD
 
-#### Minimisation
+### Minimisation
 ```
 Minimisation of complex
  &cntrl
@@ -36,7 +39,7 @@ Minimisation of complex
 END
 END
 ```
-#### First MD Run (NVT, 20ps)
+### First MD Run (NVT, 20ps)
 ```
 MD heating 0 to 300K over 20 ps at CONSTANT VOLUME,  no shake
  &cntrl
@@ -59,7 +62,7 @@ MD heating 0 to 300K over 20 ps at CONSTANT VOLUME,  no shake
 END
 END
 ```
-#### Second MD Run (NPT, 50ns)
+### Second MD Run (NPT, 50ns)
 ```
 MD run const pressure NO SHAKE
  &cntrl
@@ -83,7 +86,7 @@ MD run const pressure NO SHAKE
 END
 END
 ```
-#### Alternative Second MD Run (NVT, 50ns)
+### Alternative Second MD Run (NVT, 50ns)
 ```
 MD run const VOLUME WITH SHAKE at 300K
  &cntrl
@@ -107,9 +110,9 @@ MD run const VOLUME WITH SHAKE at 300K
 END
 END
 ```
-### Ptraj
+## Ptraj
 
-#### Combine MD runs
+### Combine MD runs
 ```
 trajin md1.mdcrd
 trajin md2.mdcrd
@@ -117,18 +120,18 @@ trajin md3.mdcrd
 trajin md4.mdcrd
 trajout md.combined.mdcrd
 ```
-#### Shorten MD run
+### Shorten MD run
 ```
 trajin md.combined.mdcrd 1 10002 10
 trajout md.shortened.mdcrd
 ```
-#### RMSD
+### RMSD
 ```
 trajin md.shortened.mdcrd
 average average.pdb pdb
 rms first out rms_first.dat  :1-349@N,C,CA
 ```
-#### Distance
+### Distance
 ```
 trajin md.shortened.mdcrd
 distance end_to_end :350@HC1 :51@HG out oh_h2.list

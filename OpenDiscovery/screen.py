@@ -72,18 +72,16 @@ class Screen(object):
 		self.total = 0
 		self.sorted_results = []
 
-		# determining user variables
-		if parse:
-			self.options = self.parser()
-		else:
-			self.options['directory'] = directory
-			self.options['receptor'] = receptor
-			self.options['exhaustiveness'] = exhaustiveness
-			self.options['driver'] = driver
-			self.options['verbose'] = verbose
+
+		self.options['directory'] = directory
+		self.options['receptor'] = receptor
+		self.options['exhaustiveness'] = exhaustiveness
+		self.options['driver'] = driver
+		self.options['verbose'] = verbose
 
 		self.protocol_dir = os.path.abspath(os.path.split(sys.argv[0])[0])
 		self.ligand_dir = os.path.abspath(os.path.expanduser(self.options['directory']))
+
 
 		# set up the wrapper for run
 		self.cmd = runProcess()
@@ -98,12 +96,13 @@ class Screen(object):
 		# lets load our state
 		self.load()
 
+		# scanning the directory to make sure we detect any additions
+		self.total = self.__scanDirectoryAndUpdateLigandState()
+
 		if self.options['receptor'] not in self.results:
 			self.results[self.options['receptor']] = {}
 		self.save()
 
-		# scanning the directory to make sure we detect any additions
-		self.total = self.__scanDirectoryAndUpdateLigandState()
 
 	def run(self):
 
@@ -177,6 +176,7 @@ class Screen(object):
 
 			if lig_name not in self.ligands:
 				self.ligands[lig_name] = lig_ext
+				print lig_name
 
 			if (lig_ext == '.pdb') and self.ligands[lig_name] != '.pdb':
 				self.ligands[lig_name] = lig_ext
@@ -293,11 +293,17 @@ class Screen(object):
 		""" Use the docking driver to perform the actual docking. """
 
 		#iterate over conf
-		total_screenings = self.numberOfConfs()
+		#total_screenings = self.numberOfConfs()
+		#print total_screenings
+		#
 
+		confsArray = glob.glob(self.ligand_dir+"/confs/"+self.options['receptor']+"*.txt")
+		ligandsArray = glob.glob(self.ligand_dir+"/ligands/*.pdbqt")
+		total_screenings = len(confsArray) * len(ligandsArray)
+		print total_screenings
 		screened = 0
 
-		for conf in glob.glob(self.ligand_dir+"/confs/"+self.options['receptor']+"*.txt"):
+		for conf in confsArray:
 			conf_name = self.__getFileNameFromPath(conf)
 
 			for ligand in self.ligands:
@@ -449,7 +455,7 @@ class Screen(object):
 		self.count['ligands'] = 0
 		for receptor in glob.glob('{ld}/ligands/*.pdbqt'.format(ld=self.ligand_dir)):
 				self.count['ligands'] += 1
-		return self.count['ligands']
+		return int(self.count['ligands'])
 
 	def numberOfReceptors(self):
 		""" Utility function to return the number of receptors. """

@@ -54,7 +54,7 @@ class Vina(object):
 		""" Actually calls the vina binary. """
 		try:
 			# if we have a result already, don't repeat it!!
-			if self.ligand in self.screen.results[self.screen.options['receptor']][self.conf]:
+			if self.ligand in self.screen.results[self.screen.options['receptor']][self.conf][self.ligand]:
 				pass
 		except:
 

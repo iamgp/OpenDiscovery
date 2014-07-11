@@ -2,7 +2,10 @@
 
 __author__ = 'Gareth Price'
 __email__ = 'gareth.price@warwick.ac.uk'
-__version__ = '2.3.1'
+__version__ = '2.4'
+__url__ = 'http://opendiscovery.co.uk'
+
+OD_VERSION = __version__
 
 import sys
 import os

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import *
+from . import OD_VERSION
 import os
 import sys
 import glob
@@ -16,7 +17,7 @@ import math
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pkg_resources
 
-__version__ = '2.3.1'
+__version__ = OD_VERSION
 
 def run(options = []):
 	directory = os.path.abspath(os.path.expanduser(options['directory']))

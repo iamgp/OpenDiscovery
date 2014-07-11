@@ -37,7 +37,7 @@ Ambertools is freely available from [ambermd.org](http://ambermd.org/). Download
 
 ```bash
 #extract the archive
-tar xvfj AmberTools14.tar.bz2 -C ~/amber14
+tar xvfj AmberTools14.tar.bz2 -C ~
 cd ~/amber14
 
 #AMBERHOME needs to be set in order for patching to work properly

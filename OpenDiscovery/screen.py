@@ -300,7 +300,6 @@ class Screen(object):
 		confsArray = glob.glob(self.ligand_dir+"/confs/"+self.options['receptor']+"*.txt")
 		ligandsArray = glob.glob(self.ligand_dir+"/ligands/*.pdbqt")
 		total_screenings = len(confsArray) * len(ligandsArray)
-		print total_screenings
 		screened = 0
 
 		for conf in confsArray:

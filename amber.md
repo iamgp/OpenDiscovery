@@ -222,7 +222,9 @@ MD run const VOLUME WITH SHAKE at 300K
 END
 END
 ```
-## Ptraj
+## Analysis
+
+![Analysis](files/amber-analysis.svg)
 
 ### Combine MD runs
 ```bash

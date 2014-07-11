@@ -1,6 +1,8 @@
 #Amber Workflow
 Note: [Amber](http://ambermd.org) is commercial software.
 
+![Amber Workflow](files/amber-workflow.png)
+
 ## Cleaning the Receptor
 
 The only required or useful data in a PDB file to set up AMBER simulations are: atom names, residue names, and maybe chain identifiers (if more than one chain is present), and the coordinates of heavy atoms

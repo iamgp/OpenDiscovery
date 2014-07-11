@@ -1,4 +1,4 @@
-#Installing ambertools on Ubuntu linux
+#Installing ambertools on Ubuntu
 
 ## Installing dependencies
 

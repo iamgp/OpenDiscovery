@@ -25,8 +25,9 @@ Installation Instructions
 -------------------------
 
 Instructions can be found at the following locations:
- -  `MacOSX <http://opendiscovery.co.uk/installing-od-osx.html>`_
- -  `Ubuntu <http://opendiscovery.co.uk/installing-od-ubuntu.html>`_
+
+-  `MacOSX <http://opendiscovery.co.uk/installing-od-osx.html>`_
+-  `Ubuntu <http://opendiscovery.co.uk/installing-od-ubuntu.html>`_
 
 References
 ----------

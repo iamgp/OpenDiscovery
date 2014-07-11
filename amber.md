@@ -1,7 +1,7 @@
 #Amber Workflow
 Note: [Amber](http://ambermd.org) is commercial software.
 
-![Amber Workflow](files/amber-workflow.png)
+![Amber Workflow](files/amber-workflow.svg)
 
 ## Cleaning the Receptor
 
@@ -137,6 +137,8 @@ mpiexec  -n 4 $AMBERHOME/bin/pmemd.cuda.MPI \
 ``` 
 
 ## MD
+![MD Workflow](files/md-workflow.svg)
+
 The followng scripts are for the actual molecular dynamics runs. They are largely use-as-is, so I won't describe them.
 
 ### Minimisation

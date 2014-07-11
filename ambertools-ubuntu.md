@@ -17,7 +17,7 @@ sudo apt-get install python-tk python-dev python-matplotlib python-numpy python-
 We extract the files and set the necessary environmental variables.
 ```bash
 # Extract the archive
-tar xvfj AmberTools14.tar.bz2 -C ~/amber14
+tar xvfj AmberTools14.tar.bz2 -C ~/
 cd ~/amber14
 
 # AMBERHOME needs to be set in order for patching to work properly

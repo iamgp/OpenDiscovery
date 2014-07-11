@@ -5,3 +5,7 @@
 .content h1, .content h2 {
 	/*text-transform: none !important;*/
 }
+
+img {
+	max-width: 100% !important;
+}

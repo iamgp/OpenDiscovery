@@ -1,4 +1,4 @@
-OpenDisc\ ` <>`__\ overy
+OpenDiscovery
 ========================
 
 Version: 2.4

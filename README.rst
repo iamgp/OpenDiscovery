@@ -18,15 +18,15 @@ simulation, an area we expect to develop in the future.
 Requirements
 ------------
 
--  Open Babel (install from http://openbabel.org/ - version developed
+  -  Open Babel (install from http://openbabel.org/ - version developed
    with: 2.3.1). Open Babel is used for file conversions.
 
 Installation Instructions
 -------------------------
 
 Instructions can be found at the following locations:
-- MacOSX <http://opendiscovery.co.uk/installing-od-osx.html>
-- Ubuntu <http://opendiscovery.co.uk/installing-od-ubuntu.html>
+  -  **MacOSX** <http://opendiscovery.co.uk/installing-od-osx.html>
+  -  **Ubuntu** <http://opendiscovery.co.uk/installing-od-ubuntu.html>
 
 References
 ----------

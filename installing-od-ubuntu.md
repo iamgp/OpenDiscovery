@@ -187,8 +187,8 @@ You can follow the instructions that are described for the local installation, a
 # Install pip
 mkdir ~/pip && cd ~/pip
 wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
-sudo python get_pip.py
-rm -r ~/pip
+sudo python get-pip.py
+cd ~ && rm -r ~/pip
 ```
 
 ### Installing OpenDiscovery

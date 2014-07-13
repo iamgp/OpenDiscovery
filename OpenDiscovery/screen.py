@@ -30,10 +30,10 @@ def run(options = []):
 	for i, receptor in enumerate(glob.glob(receptor_folder)):
 		receptor_name, receptor_extension = os.path.splitext(os.path.basename(os.path.normpath(receptor)))
 		s = Screen (
-			parse 			= tryForKeyInDict('parse',         options, False),
-			directory 		= tryForKeyInDict('directory',     options, '~'),
+			parse 			= tryForKeyInDict('parse',          options, False),
+			directory 		= tryForKeyInDict('directory',      options, '~'),
 			exhaustiveness 	= tryForKeyInDict('exhaustiveness', options, 20),
-			verbose 		= tryForKeyInDict('verbose',       options, False),
+			verbose 		= tryForKeyInDict('verbose',        options, False),
 			header 			= True if i == 0 else False,
 			receptor 		= receptor_name
 		)

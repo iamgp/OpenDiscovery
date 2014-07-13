@@ -24,7 +24,7 @@ setup(
     package_dir={'OpenDiscovery': 'OpenDiscovery'},
     package_data={'OpenDiscovery': ['lib/vina-osx/vina', 'lib/vina-linux/vina', 'lib/extract.awk']},
     include_package_data=True,
-    install_requires=['argparse','matplotlib', 'pandas', 'numpy'],
+    install_requires=['argparse','matplotlib', 'pandas', 'numpy', 'termcolor', 'docopt'],
     license="GPL",
     keywords='OpenDiscovery',
     classifiers=[
@@ -38,6 +38,10 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry'
     ],
-    scripts=['bin/odscreen'],
+    entry_points={
+        'console_scripts': [
+            'odscreen = OpenDiscovery.screen:cli'
+        ],
+    },
     zip_safe=False
 )

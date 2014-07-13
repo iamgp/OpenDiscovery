@@ -16,6 +16,7 @@ import numpy as np
 import math
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pkg_resources
+import argparse
 
 __version__ = OD_VERSION
 
@@ -45,6 +46,20 @@ def tryForKeyInDict(needle, haystack, fallback):
 		return haystack[needle]
 	except Exception, e:
 		return fallback
+
+def cli():
+	parser = argparse.ArgumentParser(description='Open Discovery Screening Protocol')
+	parser.add_argument('-d', '--directory',help='Path to the ligand directory. Required!', required=True)
+	parser.add_argument('-e', '--exhaustiveness',help='Exhaustiveness. Default = 20.', type=int, default=20)
+	parser.add_argument('-v', '--verbose', help='Enable verbose output. Default = False.', action='store_true', default=False)
+	parsed = vars(parser.parse_args())
+
+	options                   = {}
+	options['directory']      = parsed['directory']
+	options['exhaustiveness'] = parsed['exhaustiveness']
+	options['verbose']		  = parsed['verbose']
+
+	run(options)
 
 class Screen(object):
 	"""	A Screening object that can be used to perform docking of ligands to a receptor.

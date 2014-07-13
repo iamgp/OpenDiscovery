@@ -1,6 +1,5 @@
 recursive-include OpenDiscovery *
-recursive-include bin *
 
 global-exclude *.pyc
 
-include README.rest CHANGELOG.md LICENSE
+include README.rest CHANGELOG.md LICENSE.txt

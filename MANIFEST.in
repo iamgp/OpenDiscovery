@@ -2,4 +2,4 @@ recursive-include OpenDiscovery *
 
 global-exclude *.pyc
 
-include README.rest CHANGELOG.md LICENSE.txt
+include README.rst CHANGELOG.md LICENSE.txt

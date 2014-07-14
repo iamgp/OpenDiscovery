@@ -38,10 +38,11 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry'
     ],
-    entry_points={
-        'console_scripts': [
-            'odscreen = OpenDiscovery.screen:cli'
-        ],
-    },
+    scripts=['bin/odscreen'],
+    # entry_points={
+    #     'console_scripts': [
+    #         'odscreen = OpenDiscovery.screen:cli'
+    #     ],
+    # },
     zip_safe=False
 )

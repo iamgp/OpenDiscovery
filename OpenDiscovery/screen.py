@@ -191,7 +191,6 @@ class Screen(object):
 
 			if lig_name not in self.ligands:
 				self.ligands[lig_name] = lig_ext
-				print lig_name
 
 			if (lig_ext == '.pdb') and self.ligands[lig_name] != '.pdb':
 				self.ligands[lig_name] = lig_ext
@@ -379,6 +378,9 @@ class Screen(object):
 		""" Extracts the energy information from vina logs, and adds it to a sorted csv. """
 
 		self.results[self.options['receptor']] = {}
+		confsArray = glob.glob(self.ligand_dir+"/confs/"+self.options['receptor']+"*.txt")
+		ligandsArray = glob.glob(self.ligand_dir+"/ligands/*.pdbqt")
+		total_screenings = len(confsArray) * len(ligandsArray)
 
 		results_folder = []
 		for conf_file in glob.glob(self.ligand_dir + "/confs/"+self.options['receptor']+"*"):
@@ -402,7 +404,7 @@ class Screen(object):
 			                with open(rf+'/summary.csv', 'a') as summary:
 			                    summary.write('{0},{1}\n'.format(lig_name, float(energy)))
 
-				ProgressBar(current, self.numberOfConfs(), 'Gathering Results: ')
+				ProgressBar(current, total_screenings, 'Gathering Results: ')
 				current = current + 1
 
 				self.results[self.options['receptor']][conf_file][lig_name] = energy

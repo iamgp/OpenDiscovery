@@ -10,6 +10,8 @@ OD_VERSION = __version__
 import sys
 import os
 import errno
+from helpers import *
+from helpers.log import *
 
 def log(message="", verbose=True, colour=None, background=None, bold=False, underline=False, inverted=False, run=False, ret=False):
     """ log() prints a message that is formatted properly.
@@ -131,3 +133,10 @@ def makeFolder(path):
     except OSError as exception:
         if exception.errno != errno.EEXIST:
             raise
+
+
+def tryForKeyInDict(needle, haystack, fallback):
+    try:
+        return haystack[needle]
+    except Exception, e:
+        return fallback

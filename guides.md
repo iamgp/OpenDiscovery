@@ -5,3 +5,4 @@
 *  [Amber](amber.html)
 *  [Installing OpenDiscovery on OSX](installing-od-osx.html)
 *  [Installing OpenDiscovery on Ubuntu](installing-od-ubuntu.html)
+*  [Using OpenDiscovery](using-od.html)

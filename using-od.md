@@ -2,7 +2,7 @@
 
 ## Basic setup
 
-Once installed, OpenDiscovery is easy to use. First we need to set up the directory in which all the files are located for OpenDiscovery to use. 
+Once installed, OpenDiscovery is easy to use. First we need to set up the directory in which all the files are located for OpenDiscovery to use.
 
 ![](folder-setup.png)
 
@@ -27,7 +27,9 @@ This folder should contain text files (i.e. something**.txt**), and they must co
 Although OpenDiscovery is configurable and runnable through python code, the most common method of running OpenDiscovery is through its binary.
 
 You need to know 2 things:
+
 * the path to the directory you created above
+
 * the exhaustiveness of the docking you wish to perform
 
 With these two pieces of information in mind, open up a terminal and run OpenDiscovery by typing:

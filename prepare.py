@@ -3,4 +3,4 @@
 
 from OpenDiscovery.md import MDPreparation
 
-MDPreparation(directory = '~/Desktop/od_test').run(	)
+MDPreparation(directory='~/Desktop/od_test').run()

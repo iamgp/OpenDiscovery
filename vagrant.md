@@ -25,7 +25,7 @@ vagrant init garethprice/opendiscovery
 This will download a 1.4 GB file, so depending on your internet speed this may take a while.
 
 ## Using the OD Box
-Make sure you are in the directory you made before (`cd ~/vagrant-od), then run the following in terminal:
+Make sure you are in the directory you made before (`cd ~/vagrant-od`), then run the following in terminal:
 
 ```bash
 vagrant up --provider virtualbox

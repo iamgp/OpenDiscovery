@@ -6,7 +6,7 @@ We need to download and install `pip` in order for us to use it to install OpenD
 ```bash
 # Install pip
 mkdir ~/pip && cd ~/pip
-wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+wget https://bootstrap.pypa.io/get-pip.py
 sudo python get-pip.py
 cd ~ && rm -r ~/pip
 ```

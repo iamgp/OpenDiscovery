@@ -2,7 +2,7 @@
 
 __author__ = 'Gareth Price'
 __email__ = 'gareth.price@warwick.ac.uk'
-__version__ = '2.4.6'
+__version__ = '2.5'
 __url__ = 'http://opendiscovery.co.uk'
 
 OD_VERSION = __version__
@@ -12,6 +12,7 @@ import os
 import errno
 from helpers import *
 from helpers.log import *
+
 
 def log(message="", verbose=True, colour=None, background=None, bold=False, underline=False, inverted=False, run=False, ret=False):
     """ log() prints a message that is formatted properly.
@@ -82,6 +83,7 @@ def logHeader(message):
     message = '\n{message}'.format(message=message)
     print message
 
+
 def printHeader(message):
     if 'linux' in sys.platform:
         print """\r{message:<20} """.format(message=message)
@@ -102,7 +104,7 @@ class ProgressBar(object):
         time.sleep(0.01)
 
         progress += 1
-        percentage = (progress*10/total) #(divided by 10)
+        percentage = (progress * 10 / total)  # (divided by 10)
         percentage_left = 10 - percentage
 
         bar = '['
@@ -118,10 +120,11 @@ class ProgressBar(object):
             else:
                 string = '\r {message} {bar}'.format(message=message, bar=bar)
         else:
-                string = '\r {message} {bar}'.format(message=message, bar=bar)
+            string = '\r {message} {bar}'.format(message=message, bar=bar)
 
         sys.stdout.write(string)
         sys.stdout.flush()
+
 
 def makeFolder(path):
     """Attempts folder creation

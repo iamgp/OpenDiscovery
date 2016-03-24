@@ -24,6 +24,9 @@ Installation Instructions
 
 Instructions can be found at the following locations:
 
+- **New: Vagrant** http://opendiscovery.co.uk/vagrant.html
+
+
 -  `MacOSX <http://opendiscovery.co.uk/installing-od-osx.html>`_
 -  `Ubuntu <http://opendiscovery.co.uk/installing-od-ubuntu.html>`_
 
